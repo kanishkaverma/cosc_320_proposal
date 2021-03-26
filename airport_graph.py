@@ -7,12 +7,10 @@ PRICE_PER_FLIGHT_TIME = 0
 PRICE_PER_WAIT_TIME = 0
 
 class Airport:
-    def __init__(self, v):
+    def __init__(self, airPortId):
         self.flights = []
-        self.airportId = v
+        self.airportId = airPortId
         # useful for DFS
-        self.inTime = None
-        self.outTime = None
         self.status = "unvisited"
         
     def hasOutNeighbor(self,v):
