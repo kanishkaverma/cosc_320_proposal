@@ -20,12 +20,11 @@ class Airport:
             return True
         return False
         
-    
     def getOutNeighbors(self):
-        return self.outNeighbors
+        return self.flights
         
     def addOutNeighbor(self,v):
-        self.outNeighbors.append(v)
+        self.flights.append(v)
     
     def __str__(self):
         return str(self.value) 
