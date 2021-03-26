@@ -1,6 +1,6 @@
 
 # First, Vertex and Graph classes for directed graphs
-
+from functools import cmp_to_key
 # Constants we are going to use
 PRICE_PER_DISTANCE = 0
 PRICE_PER_FLIGHT_TIME = 0
@@ -74,6 +74,13 @@ class State:
         flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
+
+    def comparator(self, a, b):
+        if a.getCost < b.getCost:
+            return -1
+        if a.getCost > b.getCost:
+            return 1
+        return 0
 
 def create_aiport_graph(dairport):
     airport_graph = Graph() 
