@@ -31,28 +31,13 @@ class Airport:
 # It can also be used as an undirected graph by adding edges in both directions.
 class Graph:
     def __init__(self):
-        self.vertices = []
+        self.airports = {}
 
     def addVertex(self,n):
         self.vertices.append(n)
         
     # add a directed edge from CS161Node u to CS161Node v
-    def addDiEdge(self,u,v):
-        u.addOutNeighbor(v)
-        v.addInNeighbor(u)
-        
-    # add edges in both directions between u and v
-    def addBiEdge(self,u,v):
-        self.addDiEdge(u,v)
-        self.addDiEdge(v,u)
-        
-    # get a list of all the directed edges
-    # directed edges are a list of two vertices
-    def getDirEdges(self):
-        ret = []
-        for v in self.vertices:
-            ret += [ [v, u] for u in v.outNeighbors ]
-        return ret
+    def addFlight(self,u,v):
     
     def __str__(self):
         ret = "Graph with:\n"
