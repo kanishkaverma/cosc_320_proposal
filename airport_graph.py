@@ -33,8 +33,13 @@ class Graph:
     def __init__(self):
         self.airports = {}
 
-    def addVertex(self,n):
-        self.vertices.append(n)
+    def addAirPort(self, airportId: int) -> bool:
+        if airportId in self.airports:
+            return False
+        else:
+            newAirport = Airport(airportId)
+            self.airports[airportId] = newAirport
+            return True
         
     # add a directed edge from CS161Node u to CS161Node v
     def addFlight(self,u,v):
