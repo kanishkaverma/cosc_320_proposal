@@ -86,6 +86,7 @@ if __name__ == "__main__":
     F = Flight(1,1,1,1,1)
     State(1,F,0)
     print("Hello")
+    data = []
 
     currentLoc = 1111
     src = 1111
