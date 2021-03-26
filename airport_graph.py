@@ -8,8 +8,7 @@ PRICE_PER_WAIT_TIME = 0
 
 class Airport:
     def __init__(self, v):
-        self.inNeighbors = []
-        self.outNeighbors = []
+        self.flights = []
         self.value = v
         # useful for DFS
         self.inTime = None
@@ -21,27 +20,12 @@ class Airport:
             return True
         return False
         
-    def hasInNeighbor(self,v):
-        if v in self.inNeighbors:
-            return True
-        return False
-    
-    def hasNeighbor(self,v):
-        if v in self.inNeighbors or v in self.outNeighbors:
-            return True
-        return False
     
     def getOutNeighbors(self):
         return self.outNeighbors
-    
-    def getInNeighbors(self):
-        return self.inNeighbors
         
     def addOutNeighbor(self,v):
         self.outNeighbors.append(v)
-    
-    def addInNeighbor(self,v):
-        self.inNeighbors.append(v)
     
     def __str__(self):
         return str(self.value) 
