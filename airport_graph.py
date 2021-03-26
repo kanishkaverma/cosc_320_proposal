@@ -68,6 +68,9 @@ class State:
         self.currentTime = currentTime
         self.currentLoc = currentLoc
         self.cost = self.getCost()
+
+        def __repr__(self):
+            return {'cost':self.getCost}
     
     def getCost(self):
         waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
@@ -75,16 +78,14 @@ class State:
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
 
-    def comparator(self, a, b):
-        if a.getCost < b.getCost:
+    def comparator(a, b):
+        if a.cost < b.cost:
             return -1
-        if a.getCost > b.getCost:
+        if a.cost > b.cost:
             return 1
         return 0
 
 if __name__ == "__main__":
-    F = Flight(1,1,1,1,1)
-    State(1,F,0)
     print("Hello")
     data = []
 
@@ -114,7 +115,7 @@ if __name__ == "__main__":
 
     data = sorted(data, key=cmp_to_key(State.comparator))
     for i in data:
-        print(i)
+        print(i.flight.airTime)
 
 """
 import pandas as pd 
