@@ -69,6 +69,7 @@ class State:
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
+        self.cost = self.getCost()
     
     def getCost(self):
         waitCost = (self.flight.takeoffTime-self.currentTime)*PRICE_PER_WAIT_TIME
