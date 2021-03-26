@@ -60,7 +60,7 @@ class Graph:
     def __str__(self):
         returnStr = "Airports are: \n"
         returnStr += str(self.airports.keys())
-        return ret
+        return returnStr
 
 class State:
     def __init__(self, currentLoc: int, flight: Flight, currentTime):
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     currentTime = 1940
 
     flight = Flight(src, dst, takeoffTime, airTime, dist)
-    state = State(currentLoc, Flight, currentTime)
+    state = State(currentLoc, flight, currentTime)
     data.append(state)
 
     currentLoc_ = 1111
