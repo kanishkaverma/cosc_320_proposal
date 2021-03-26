@@ -7,10 +7,10 @@ PRICE_PER_FLIGHT_TIME = 0
 PRICE_PER_WAIT_TIME = 0
 
 class Flight:
-    def __init__(self, src: int, dst: int, takeoffTime, airTime: int, dist: int):
+    def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
         self.src = src
         self.dst = dst
-        self.takeoffTime = takeoffTime
+        self.takeOffTime = takeOffTime
         self.airTime = airTime
         self.dist=dist
 
@@ -70,7 +70,7 @@ class State:
         self.cost = self.getCost()
     
     def getCost(self):
-        waitCost = (self.flight.takeoffTime-self.currentTime)*PRICE_PER_WAIT_TIME
+        waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
         flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
@@ -92,6 +92,8 @@ def create_aiport_graph(dairport):
     return airport_graph
 
 if __name__ == "__main__":
+    F = Flight(1,1,1,1,1)
+    State(1,F,0)
     print("Hello")
 
 """
