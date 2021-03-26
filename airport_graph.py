@@ -13,15 +13,13 @@ class Airport:
         # useful for DFS
         self.status = "unvisited"
         
-    def hasOutNeighbor(self,v):
-        if v in self.outNeighbors:
-            return True
+    def hasFlight(self,dst):
+        for flight in self.flights:
+            if flight.dst == dst:
+                return True
         return False
         
-    def getOutNeighbors(self):
-        return self.flights
-        
-    def addOutNeighbor(self,v):
+    def addFlight(self, flight: Flight):
         self.flights.append(v)
     
     def __str__(self):
@@ -33,7 +31,7 @@ class Graph:
     def __init__(self):
         self.airports = {}
 
-    def addAirPort(self, airportId: int) -> bool:
+    def addAirport(self, airportId: int) -> bool:
         if airportId in self.airports:
             return False
         else:
@@ -41,8 +39,13 @@ class Graph:
             self.airports[airportId] = newAirport
             return True
         
-    # add a directed edge from CS161Node u to CS161Node v
-    def addFlight(self,u,v):
+    # add a flight to the graph
+    def addFlight(self,flight: Flight) -> bool:
+        if flight.src not in self.airports:
+            return False
+        else:
+            self.airports[flight.src].addFlight(flight)
+
     
     def __str__(self):
         ret = "Graph with:\n"
