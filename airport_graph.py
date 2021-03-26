@@ -9,7 +9,7 @@ PRICE_PER_WAIT_TIME = 0
 class Airport:
     def __init__(self, v):
         self.flights = []
-        self.value = v
+        self.airportId = v
         # useful for DFS
         self.inTime = None
         self.outTime = None
@@ -27,7 +27,7 @@ class Airport:
         self.flights.append(v)
     
     def __str__(self):
-        return str(self.value) 
+        return str(self.airportId) 
         
 # This is a directed graph class for use in this course.
 # It can also be used as an undirected graph by adding edges in both directions.
@@ -96,8 +96,10 @@ def create_aiport_graph(dairport):
         airport_graph.addVertex(airport_vertex)
 
     return airport_graph
-        
-#%% 
+
+if __name__ == "__main__":
+    print("Hello")
+
 """
 import pandas as pd 
 
@@ -113,5 +115,4 @@ dairport = dg.drop_duplicates(subset=["OriginAirportID"],inplace= False)
 print(create_aiport_graph(dairport))
 
 
-#%% 
 """
