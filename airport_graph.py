@@ -60,7 +60,7 @@ class Graph:
     def __str__(self):
         returnStr = "Airports are: \n"
         returnStr += str(self.airports.keys())
-        return ret
+        return returnStr
 
 class State:
     def __init__(self, currentLoc: int, flight: Flight, currentTime):
