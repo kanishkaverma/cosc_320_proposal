@@ -96,6 +96,34 @@ if __name__ == "__main__":
     State(1,F,0)
     print("Hello")
 
+    currentLoc = 1111
+    src = 1111
+    dst = 2222
+    takeoffTime = 1980
+    airTime = 121
+    dist = 30
+    currentTime = 1940
+
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    state = State(currentLoc, Flight, currentTime)
+    data.append(state)
+
+    currentLoc_ = 1111
+    src_ = 1111
+    dst_ = 2222
+    takeoffTime_ = 1980
+    airTime_ = 400
+    dist_ = 100
+    currentTime_ = 1940
+
+    flight = Flight(src_, dst_, takeoffTime_, airTime_, dist_)
+    state = State(currentLoc_, flight, currentTime_)
+    data.append(state)
+
+    data = sorted(data, key=cmp_to_key(State.comparator))
+    for i in data:
+        print(i)
+
 """
 import pandas as pd 
 
