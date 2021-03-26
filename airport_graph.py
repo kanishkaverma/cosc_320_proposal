@@ -63,7 +63,7 @@ class Graph:
         return ret
 
 class State:
-    def __init__(self, currentLoc, flight: Flight, currentTime):
+    def __init__(self, currentLoc: int, flight: Flight, currentTime):
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
