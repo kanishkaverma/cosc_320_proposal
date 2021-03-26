@@ -96,7 +96,7 @@ def create_aiport_graph(dairport):
 #%% 
 import pandas as pd 
 
-df = pd.read_csv('./data/flight_data_cleaned.csv')
+df = pd.read_csv('flight_data_cleaned.csv')
 df.head()
 
 
