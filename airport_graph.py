@@ -74,7 +74,19 @@ class Flight:
         self.dst = dst
         self.takeoffTime = takeoffTime
         self.airTime = airTime
-        self.dist=d ist
+        self.dist=dist
+
+class State:
+    def __init__(self, currentLoc, flight: Flight, currentTime):
+        self.flight = flight
+        self.currentTime = currentTime
+        self.currentLoc = currentLoc
+    
+    def getCost(self):
+        waitCost = (self.flight.takeoffTime-self.currentTime)*PRICE_PER_WAIT_TIME
+        flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
+        distCost = self.flight.dist * PRICE_PER_DISTANCE
+        return  waitCost + flightTimeCost + distCost
 
 def create_aiport_graph(dairport):
     airport_graph = Graph() 
@@ -86,13 +98,13 @@ def create_aiport_graph(dairport):
     return airport_graph
         
 #%% 
+"""
 import pandas as pd 
 
 df = pd.read_csv('flight_data_cleaned.csv')
 df.head()
 
 
-#%% 
 
 dg = df.sample(50, axis=0)
 dairport = dg.drop_duplicates(subset=["OriginAirportID"],inplace= False)
@@ -102,3 +114,4 @@ print(create_aiport_graph(dairport))
 
 
 #%% 
+"""
