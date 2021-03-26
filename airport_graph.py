@@ -6,6 +6,14 @@ PRICE_PER_DISTANCE = 0
 PRICE_PER_FLIGHT_TIME = 0
 PRICE_PER_WAIT_TIME = 0
 
+class Flight:
+    def __init__(self, src, dst, takeoffTime, airTime, dist):
+        self.src = src
+        self.dst = dst
+        self.takeoffTime = takeoffTime
+        self.airTime = airTime
+        self.dist=dist
+
 class Airport:
     def __init__(self, airPortId):
         self.flights = []
@@ -53,14 +61,6 @@ class Graph:
         returnStr = "Airports are: \n"
         returnStr += str(self.airports.keys())
         return ret
-
-class Flight:
-    def __init__(self, src, dst, takeoffTime, airTime, dist):
-        self.src = src
-        self.dst = dst
-        self.takeoffTime = takeoffTime
-        self.airTime = airTime
-        self.dist=dist
 
 class State:
     def __init__(self, currentLoc, flight: Flight, currentTime):
