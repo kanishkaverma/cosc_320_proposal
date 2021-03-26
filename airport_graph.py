@@ -1,11 +1,8 @@
 
-
-
-#%% 
 # First, Vertex and Graph classes for directed graphs
 
 
-class Vertex:
+class Airport:
     def __init__(self, v):
         self.inNeighbors = []
         self.outNeighbors = []
@@ -83,6 +80,14 @@ class Graph:
             ret += "(" + str(a) + "," + str(b) + ") "
         ret += "\n"
         return ret
+
+class Flight:
+    def __init__(self, src, dst, takeoffTime, airTime, dist):
+        self.src = src
+        self.dst = dst
+        self.takeoffTime = takeoffTime
+        self.airTime = airTime
+        self.dist=d ist
 
 def create_aiport_graph(dairport):
     airport_graph = Graph() 
