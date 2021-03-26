@@ -1,6 +1,10 @@
 
 # First, Vertex and Graph classes for directed graphs
 
+# Constants we are going to use
+PRICE_PER_DISTANCE = 0
+PRICE_PER_FLIGHT_TIME = 0
+PRICE_PER_WAIT_TIME = 0
 
 class Airport:
     def __init__(self, v):
