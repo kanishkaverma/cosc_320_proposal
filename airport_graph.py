@@ -7,7 +7,7 @@ PRICE_PER_FLIGHT_TIME = 0
 PRICE_PER_WAIT_TIME = 0
 
 class Flight:
-    def __init__(self, src, dst, takeoffTime, airTime, dist):
+    def __init__(self, src: int, dst: int, takeoffTime, airTime: int, dist: int):
         self.src = src
         self.dst = dst
         self.takeoffTime = takeoffTime
@@ -15,13 +15,13 @@ class Flight:
         self.dist=dist
 
 class Airport:
-    def __init__(self, airPortId):
+    def __init__(self, airPortId: int):
         self.flights = []
         self.airportId = airPortId
         # useful for DFS
         self.status = "unvisited"
         
-    def hasFlight(self,dst):
+    def hasFlight(self,dst: int):
         for flight in self.flights:
             if flight.dst == dst:
                 return True
@@ -49,7 +49,7 @@ class Graph:
             return True
         
     # add a flight to the graph
-    def addFlight(self,flight: Flight) -> bool:
+    def addFlight(self, flight: Flight) -> bool:
         if flight.src not in self.airports:
             print("Could not add flight because src not in graph")
             return False
