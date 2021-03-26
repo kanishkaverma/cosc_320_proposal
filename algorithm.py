@@ -20,4 +20,8 @@ from queue import PriorityQueue
 
 def solution(flights, src, dst, s):
     pq = PriorityQueue()
-    
+    initstate = State(src, s)
+    pd.add(initState)
+
+
+def State(src, s):
