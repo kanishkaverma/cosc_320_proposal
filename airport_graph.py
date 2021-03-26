@@ -86,6 +86,7 @@ if __name__ == "__main__":
     F = Flight(1,1,1,1,1)
     State(1,F,0)
     print("Hello")
+    data = []
 
     currentLoc = 1111
     src = 1111
@@ -96,7 +97,7 @@ if __name__ == "__main__":
     currentTime = 1940
 
     flight = Flight(src, dst, takeoffTime, airTime, dist)
-    state = State(currentLoc, Flight, currentTime)
+    state = State(currentLoc, flight, currentTime)
     data.append(state)
 
     currentLoc_ = 1111
