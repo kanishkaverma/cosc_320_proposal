@@ -20,7 +20,7 @@ class Airport:
         return False
         
     def addFlight(self, flight: Flight):
-        self.flights.append(v)
+        self.flights.append(flight)
     
     def __str__(self):
         return str(self.airportId) 
@@ -33,6 +33,7 @@ class Graph:
 
     def addAirport(self, airportId: int) -> bool:
         if airportId in self.airports:
+            print("Airport already added")
             return False
         else:
             newAirport = Airport(airportId)
@@ -42,21 +43,15 @@ class Graph:
     # add a flight to the graph
     def addFlight(self,flight: Flight) -> bool:
         if flight.src not in self.airports:
+            print("Could not add flight because src not in graph")
             return False
         else:
             self.airports[flight.src].addFlight(flight)
 
     
     def __str__(self):
-        ret = "Graph with:\n"
-        ret += "\t Vertices:\n\t"
-        for v in self.vertices:
-            ret += str(v) + ","
-        ret += "\n"
-        ret += "\t Edges:\n\t"
-        for a,b in self.getDirEdges():
-            ret += "(" + str(a) + "," + str(b) + ") "
-        ret += "\n"
+        returnStr = "Airports are: \n"
+        returnStr += str(self.airports.keys())
         return ret
 
 class Flight:
