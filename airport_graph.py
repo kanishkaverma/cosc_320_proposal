@@ -82,15 +82,6 @@ class State:
             return 1
         return 0
 
-def create_aiport_graph(dairport):
-    airport_graph = Graph() 
-    for index, row in  dairport.iterrows():
-        print(row['OriginAirportID'])
-        airport_vertex = Vertex(row['OriginAirportID'])
-        airport_graph.addVertex(airport_vertex)
-
-    return airport_graph
-
 if __name__ == "__main__":
     F = Flight(1,1,1,1,1)
     State(1,F,0)
