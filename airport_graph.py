@@ -121,7 +121,9 @@ class State:
         return  waitCost + flightTimeCost + distCost
     
     def __str__():
-        return ""
+        return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src} 
+        dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime} 
+        airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
 
 if __name__ == "__main__":
     airportOne = Airport(1234)
