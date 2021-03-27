@@ -3,9 +3,9 @@
 from functools import cmp_to_key
 from queue import PriorityQueue
 # Constants we are going to use
-PRICE_PER_DISTANCE = 1
-PRICE_PER_FLIGHT_TIME = 2
-PRICE_PER_WAIT_TIME = 3
+PRICE_PER_DISTANCE = 2.80/40
+PRICE_PER_FLIGHT_TIME = 13
+PRICE_PER_WAIT_TIME = 10
 OFFLOADTIME = 10*60
 
 class Flight:
@@ -61,7 +61,6 @@ class Graph:
 
     def addAirport(self, airportId: int) -> bool:
         if airportId in self.airports:
-            print("Airport already added")
             return False
         else:
             newAirport = Airport(airportId)
@@ -116,43 +115,15 @@ class State:
         return self.cost > other.cost
     
     def getCost(self):
-        waitCost = (self.waitTime/60)*PRICE_PER_WAIT_TIME
-        flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
+        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
+        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME 
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
+    
+    def __str__():
+        return ""
 
 if __name__ == "__main__":
-    print("Hello")
-    pq = PriorityQueue()
-    currentLoc = 1111
-    src = 1111
-    dst = 2222
-    takeoffTime = 1980
-    airTime = 400
-    dist = 100
-    currentTime = 1940
-
-    flight = Flight(src, dst, takeoffTime, airTime, dist)
-    state = State(currentLoc, flight, currentTime)
-    pq.put(state)
-
-    currentLoc_ = 1111
-    src_ = 1111
-    dst_ = 2222
-    takeoffTime_ = 1980
-    airTime_ = 121
-    dist_ = 30
-    currentTime_ = 1940
-
-    flight = Flight(src_, dst_, takeoffTime_, airTime_, dist_)
-    state = State(currentLoc_, flight, currentTime_)
-    pq.put(state)
-
-    small = pq.get()
-    big = pq.get()
-    # print(big.flight.airTime)
-
-
     airportOne = Airport(1234)
 
     src = 1111
@@ -180,7 +151,7 @@ if __name__ == "__main__":
     airportOne.addFlight(flight)
 
     airportOne.sortByTakeOffTime()
-    print(airportOne.flights[1].takeOffTime)
+    print(airportOne.flights[2].takeOffTime)
 
 
 """
