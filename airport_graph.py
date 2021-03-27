@@ -34,12 +34,24 @@ class Airport:
         
     def addFlight(self, flight: Flight):
         self.flights.append(flight)
+
+    # def __repr__(self):
+    #     return {'name':self.name}
     
     def __str__(self):
         outputStr = f"AirportID:: {self.airportId} \n"
         for flight in self.flights:
             outputStr += f"\t {flight.__str__()}"
         return outputStr
+
+    def sortByTakeOffTime(self):
+        def comparator(a, b):
+            if a.takeOffTime < b.takeOffTime:
+                return -1
+            if a.takeOffTime > b.takeOffTime:
+                return 1
+            return 0
+        self.flights = sorted(self.flights, key=cmp_to_key(comparator))
         
 # This is a directed graph class for use in this course.
 # It can also be used as an undirected graph by adding edges in both directions.
@@ -100,13 +112,6 @@ class State:
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
 
-    # def comparator(a, b):
-    #     if a.cost < b.cost:
-    #         return -1
-    #     if a.cost > b.cost:
-    #         return 1
-    #     return 0
-
 if __name__ == "__main__":
     print("Hello")
     pq = PriorityQueue()
@@ -136,7 +141,38 @@ if __name__ == "__main__":
 
     small = pq.get()
     big = pq.get()
-    print(big.flight.airTime)
+    # print(big.flight.airTime)
+
+
+    airportOne = Airport(1234)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 3980
+    airTime = 400
+    dist = 100
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    airportOne.addFlight(flight)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 1980
+    airTime = 400
+    dist = 100
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    airportOne.addFlight(flight)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 2980
+    airTime = 400
+    dist = 100
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    airportOne.addFlight(flight)
+
+    airportOne.sortByTakeOffTime()
+    print(airportOne.flights[1].takeOffTime)
+
 
 """
 import pandas as pd 
