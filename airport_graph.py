@@ -77,13 +77,13 @@ class State:
         self.cost = self.getCost()
 
     def __eq__(self, other):
-        return self.getCost() == other.getCost()
+        return self.cost == other.cost
 
     def __lt__(self, other):
-        return self.getCost() < other.getCost()
+        return self.cost < other.cost
 
     def __gt__(self, other):
-        return self.getCost() > other.getCost()
+        return self.cost > other.cost
     
     def getCost(self):
         waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
