@@ -41,14 +41,15 @@ def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
         print("There was no solution found")    
     else:
         for state in ourSolution:
-            print(state.flight)
+            if state.flight != None:
+                print(state.flight)
 
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
         print("The src and destination are not both in the graph")
         return []
     else:
-        startState = ag.State(src, None, startTime, [])
+        startState = ag.State(src,startTime)
         pq = PriorityQueue()
         pq.put(startState)
         while not pq.empty():

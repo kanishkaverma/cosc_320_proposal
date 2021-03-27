@@ -84,12 +84,19 @@ class Graph:
         return outputStr
 
 class State:
+    # "Counstructor" for inital state
+    def startState(self, currentLoc: int, currentTime: int):
+        self.flight = None
+        self.currentTime = None
+        self.currentLoc = currentLoc
+        self.waitTime = 0
+        self.cost = 0
+        self.pastStates = []
+        self.endTime = currentTime
+
     def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list):
-        if flight == None: # special case: first state we are putting in graph
-            self.currentLoc = currentLoc
-            self.cost = 0
-            self.endTime = currentTime
-            self.pastStates = []
+        if flight == None:
+            self.startState(currentLoc, currentTime)
             return
         self.flight = flight
         self.currentTime = currentTime
