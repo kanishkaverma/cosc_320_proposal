@@ -1,3 +1,4 @@
 data/
 .vscode/settings.json
 .vscode/.ropeproject/config.py
+__pycache__/airport_graph.cpython-39.pyc
