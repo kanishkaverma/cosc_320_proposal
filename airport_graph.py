@@ -6,6 +6,7 @@ from queue import PriorityQueue
 PRICE_PER_DISTANCE = 1
 PRICE_PER_FLIGHT_TIME = 2
 PRICE_PER_WAIT_TIME = 3
+OFFLOADTIME = 10*60
 
 class Flight:
     def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
