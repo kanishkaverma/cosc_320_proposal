@@ -111,10 +111,10 @@ if __name__=="__main__":
             airportList = random.sample(d, 2)
             solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
             t1 = time.time()
-
-            calcTime.append(t1-t0)
-            inputSize.append(i)
-            print("Iteration: " + str(i))
+            if not solutionFound:
+                calcTime.append(t1-t0)
+                inputSize.append(i)
+                print("Iteration: " + str(i))
 
         plt.plot(inputSize, calcTime)
         plt.title('Calculation Time VS Number of Flights Considered Per Node')
