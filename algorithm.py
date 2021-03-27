@@ -50,7 +50,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
         print("The src and destination are not both in the graph")
         return []
     else:
-        startState = ag.State(src,None,startTime,[])
+        startState = ag.State(src,None,startTime,[], 0)
         pq = PriorityQueue()
         pq.put(startState)
         while not pq.empty():
@@ -64,12 +64,15 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                 newPastStates.append(currentState)
                 for flight in currentAirport.flights:
                     if flight.takeOffTime > currentState.endTime:
-                        newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates))
+                        newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
+                        print(newState)
                         pq.put(newState)
         print("There was no path that made a solution possible")
         return []
 
 if __name__=="__main__":
+
+    # First test case: can it find a direclty connecting edge?
     G = ag.Graph()
     f1 = ag.Flight(1,2,3,4,100)
     G.addAirport(1)
@@ -77,7 +80,7 @@ if __name__=="__main__":
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
 
-    GReal = makeGraph("flight_data_cleaned_final.csv", 65000)
+    GReal = makeGraph("flight_data_cleaned_final.csv", 20000)
     d = list(GReal.airports.keys())
     airportList = random.sample(d, 2)
     realSolutionHelper(GReal,airportList[0],airportList[1], 1000)

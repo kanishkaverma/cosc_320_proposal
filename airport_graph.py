@@ -93,7 +93,7 @@ class State:
         self.pastStates = []
         self.endTime = currentTime
 
-    def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list):
+    def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list, currentCostTotal: float):
         if flight == None:
             self.startState(currentLoc, currentTime)
             return
@@ -101,7 +101,7 @@ class State:
         self.currentTime = currentTime
         self.currentLoc = currentLoc
         self.waitTime = flight.takeOffTime - currentTime
-        self.cost = self.getCost()
+        self.cost = currentCostTotal + self.getCost()
         self.pastStates = pastStates
         self.endTime = self.currentTime + self.waitTime + OFFLOADTIME
 
@@ -120,7 +120,7 @@ class State:
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
     
-    def __str__():
+    def __str__(self):
         return ""
 
 if __name__ == "__main__":
