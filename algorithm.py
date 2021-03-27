@@ -35,6 +35,14 @@ def solution(graph, flights, src, dst, s):
         if currentState.currentAirport == dst:
             return currentState.prevFlights 
 
+def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
+    ourSolution = realSolution(G,src,dst,startTime)
+    if len(ourSolution) == 0:
+        print("There was no solution found")    
+    else:
+        for state in ourSolution:
+            print(state.flight)
+
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
         print("The src and destination are not both in the graph")
@@ -57,3 +65,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                         pq.put(newState)
         print("There was no path that made a solution possible")
         return []
+
+if __name__=="__main__":
+    G = ag.Graph
+    f1 = ag.Flight(1,2,3,4,100)
