@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+# add to currentime by flight time. when checking the weighting time, get difference between currenttime
 
 # def solution(flights, src, dst, s):
 # 	pq = PriorityQueue(StateComparator())
