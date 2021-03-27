@@ -3,9 +3,9 @@
 from functools import cmp_to_key
 from queue import PriorityQueue
 # Constants we are going to use
-PRICE_PER_DISTANCE = 0
-PRICE_PER_FLIGHT_TIME = 0
-PRICE_PER_WAIT_TIME = 0
+PRICE_PER_DISTANCE = 1
+PRICE_PER_FLIGHT_TIME = 2
+PRICE_PER_WAIT_TIME = 3
 
 class Flight:
     def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
@@ -105,8 +105,8 @@ if __name__ == "__main__":
     src = 1111
     dst = 2222
     takeoffTime = 1980
-    airTime = 121
-    dist = 30
+    airTime = 400
+    dist = 100
     currentTime = 1940
 
     flight = Flight(src, dst, takeoffTime, airTime, dist)
@@ -117,8 +117,8 @@ if __name__ == "__main__":
     src_ = 1111
     dst_ = 2222
     takeoffTime_ = 1980
-    airTime_ = 400
-    dist_ = 100
+    airTime_ = 121
+    dist_ = 30
     currentTime_ = 1940
 
     flight = Flight(src_, dst_, takeoffTime_, airTime_, dist_)
