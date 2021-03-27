@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 from graph_from_csv import makeGraph
+import airport_graph as ag
 
 graph = makeGraph('./flight_data_cleaned_final.csv', 10)
 # add to currentime by flight time. when checking the weighting time, get difference between currenttime
@@ -31,3 +32,10 @@ def solution(graph, flights, src, dst, s):
         currentState = pq.pop()
         if currentState.currentAirport == dst:
             return currentState.prevFlights 
+
+def realSolution(G: ag.Graph, src: int, dst: int, startTime: s):
+    if src not in G.airports or dst not in G.airports:
+        print("The src and destination are not both in the graph")
+        return []
+    else:
+        
