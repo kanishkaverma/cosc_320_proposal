@@ -72,13 +72,18 @@ class Graph:
         return outputStr
 
 class State:
-    def __init__(self, currentLoc: int, flight: Flight, currentTime, pastStates: list):
+    def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list):
+        if flight == None: # special case: first state we are putting in graph
+            self.cost = 0
+            self.endTime = currentTime
+
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
         self.waitTime = flight.takeOffTime - currentTime
         self.cost = self.getCost()
         self.pastStates = pastStates
+        self.endTime = self.currentTime + self.waitTime + OFFLOADTIME
 
     def __eq__(self, other):
         return self.cost == other.cost
