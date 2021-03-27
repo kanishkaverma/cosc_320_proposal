@@ -16,7 +16,7 @@ class Flight:
         self.dist=dist
 
     def __str__(self):
-        return f"src: {self.src} dst: {self.dst} takeOffTime: {self.takeOffTime} airTime: {self.airTime} distance: {self.dist}"
+        return f"src: {self.src} dst: {self.dst} takeOffTime: {self.takeOffTime} airTime: {self.airTime} distance: {self.dist}\n"
 
 class Airport:
     def __init__(self, airPortId: int):
@@ -65,7 +65,7 @@ class Graph:
 
     
     def __str__(self):
-        outputStr = "For this entire graph, the airports are: "
+        outputStr = "For this entire graph, the airports are: \n\n\n"
         for airportId in self.airports.keys():
             outputStr += f"{self.airports[airportId].__str__()}\n"
         return outputStr
