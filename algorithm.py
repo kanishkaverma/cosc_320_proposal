@@ -93,19 +93,20 @@ if __name__=="__main__":
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
         
-    d = list(GReal.airports.keys())
+    
 
     if plotGrowthRate:
-        upperBound = 30000 # maximum number of flights to consider in loop
-        lowerBound = 20000
-        step = 1000
+        upperBound = 1000 # maximum number of flights to consider in loop
+        lowerBound = 100
+        step = 10
         calcTime = [] # stores timeDelta for finding solution
         inputSize = [] # stores the input size for the respective timeDelta
         src = 10980 # src airport id
         dst = 12896 # destination airport id
         
-        for i in range(1, upperBound, step):
+        for i in range(lowerBound, upperBound, step):
             GReal = makeGraph("flight_data_cleaned_final.csv", 50)
+            d = list(GReal.airports.keys())
             t0 = time.time()
             airportList = random.sample(d, 2)
             solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], i)
