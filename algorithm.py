@@ -41,9 +41,11 @@ def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
     if len(ourSolution) == 0:
         print("There was no solution found")    
     else:
+        print(f"The solution from {src} to {dst} is ")
         for state in ourSolution:
             if state.flight != None:
                 print(state.flight)
+        print(ourSolution[len(ourSolution)-1].cost)
 
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
@@ -65,7 +67,6 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                 for flight in currentAirport.flights:
                     if flight.takeOffTime > currentState.endTime:
                         newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
-                        print(newState)
                         pq.put(newState)
         print("There was no path that made a solution possible")
         return []
