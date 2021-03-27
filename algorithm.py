@@ -54,7 +54,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
         while not pq.empty():
             currentState = pq.get()
             if currentState.currentLoc == dst:
-                return currentState.pastStates:
+                return currentState.pastStates
             else:
                 currentAirport = G.airports[currentState.currentLoc]
                 newPastStates = copy.deepcopy(currentState.pastStates)
@@ -69,3 +69,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
 if __name__=="__main__":
     G = ag.Graph
     f1 = ag.Flight(1,2,3,4,100)
+    G.addAirport(1)
+    G.addAirport(2)
+    G.addFlight(f1)
+    realSolutionHelper(G,1,2,1)

@@ -16,6 +16,7 @@ def makeGraph(path_to_csv,n):
     
     # print(flight_graph)
     return flight_graph
-print(makeGraph("flight_data_cleaned_final.csv", 10))
+if __name__ == "__main__":
+    print(makeGraph("flight_data_cleaned_final.csv", 10))
 
 
