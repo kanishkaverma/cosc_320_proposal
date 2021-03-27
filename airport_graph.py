@@ -66,7 +66,7 @@ class Graph:
     def __str__(self):
         outputStr = "For this entire graph, the airports are: "
         for airportId in self.airports.keys():
-            outputStr += f"{self.airports[airportId]}\n"
+            outputStr += f"{self.airports[airportId].__str__()}\n"
 
 class State:
     def __init__(self, currentLoc: int, flight: Flight, currentTime):
