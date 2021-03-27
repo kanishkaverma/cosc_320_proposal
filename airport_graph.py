@@ -25,19 +25,19 @@ class Airport:
         self.airportId = airPortId
         # useful for DFS
         self.status = "unvisited"
-        
+
     def hasFlight(self,dst: int):
         for flight in self.flights:
             if flight.dst == dst:
                 return True
         return False
-        
+
     def addFlight(self, flight: Flight):
         self.flights.append(flight)
 
     # def __repr__(self):
     #     return {'name':self.name}
-    
+
     def __str__(self):
         outputStr = f"AirportID:: {self.airportId} \n"
         for flight in self.flights:
@@ -52,7 +52,7 @@ class Airport:
                 return 1
             return 0
         self.flights = sorted(self.flights, key=cmp_to_key(comparator))
-        
+
 # This is a directed graph class for use in this course.
 # It can also be used as an undirected graph by adding edges in both directions.
 class Graph:
@@ -66,7 +66,7 @@ class Graph:
             newAirport = Airport(airportId)
             self.airports[airportId] = newAirport
             return True
-        
+
     # add a flight to the graph
     def addFlight(self, flight: Flight) -> bool:
         if flight.src not in self.airports:
@@ -75,7 +75,7 @@ class Graph:
         else:
             self.airports[flight.src].addFlight(flight)
 
-    
+
     def __str__(self):
         outputStr = "For this entire graph, the airports are: \n\n\n"
         for airportId in self.airports.keys():
@@ -113,15 +113,17 @@ class State:
 
     def __gt__(self, other):
         return self.cost > other.cost
-    
+
     def getCost(self):
         waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
-        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME 
+        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
-    
-    def __str__(self):
-        return ""
+
+    def __str__():
+        return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src}
+        dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime}
+        airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
 
 if __name__ == "__main__":
     airportOne = Airport(1234)
@@ -155,7 +157,7 @@ if __name__ == "__main__":
 
 
 """
-import pandas as pd 
+import pandas as pd
 
 df = pd.read_csv('flight_data_cleaned.csv')
 df.head()
