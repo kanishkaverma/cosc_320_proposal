@@ -75,6 +75,7 @@ class State:
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
+        self.waitTime = flight.takeOffTime - currentTime
         self.cost = self.getCost()
 
     def __eq__(self, other):
@@ -87,7 +88,7 @@ class State:
         return self.cost > other.cost
     
     def getCost(self):
-        waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
+        waitCost = (self.waitTime/60)*PRICE_PER_WAIT_TIME
         flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
