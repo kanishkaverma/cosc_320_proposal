@@ -15,6 +15,9 @@ def makeGraph(path_to_csv,n):
         flight_graph.addAirport(row['DestAirportID'])
         fli = Flight(row['OriginAirportID'],row['DestAirportID'],row['FlightDate_DepTime'].timestamp(),row['AirTime'],row['Distance']) 
         flight_graph.addFlight(fli)
+    
+
+    return flight_graph
 # makeGraph("./data/flight_data_cleaned_final.csv", 10)
 
 
