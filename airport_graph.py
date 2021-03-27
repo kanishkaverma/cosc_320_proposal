@@ -1,6 +1,7 @@
 
 # First, Vertex and Graph classes for directed graphs
 from functools import cmp_to_key
+from queue import PriorityQueue
 # Constants we are going to use
 PRICE_PER_DISTANCE = 0
 PRICE_PER_FLIGHT_TIME = 0
@@ -69,8 +70,14 @@ class State:
         self.currentLoc = currentLoc
         self.cost = self.getCost()
 
-        def __repr__(self):
-            return {'cost':self.getCost}
+    def __eq__(self, other):
+        return self.getCost() == other.getCost()
+
+    def __lt__(self, other):
+        return self.getCost() < other.getCost()
+
+    def __gt__(self, other):
+        return self.getCost() > other.getCost()
     
     def getCost(self):
         waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
@@ -78,17 +85,16 @@ class State:
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
 
-    def comparator(a, b):
-        if a.cost < b.cost:
-            return -1
-        if a.cost > b.cost:
-            return 1
-        return 0
+    # def comparator(a, b):
+    #     if a.cost < b.cost:
+    #         return -1
+    #     if a.cost > b.cost:
+    #         return 1
+    #     return 0
 
 if __name__ == "__main__":
     print("Hello")
-    data = []
-
+    pq = PriorityQueue()
     currentLoc = 1111
     src = 1111
     dst = 2222
@@ -99,7 +105,7 @@ if __name__ == "__main__":
 
     flight = Flight(src, dst, takeoffTime, airTime, dist)
     state = State(currentLoc, flight, currentTime)
-    data.append(state)
+    pq.put(state)
 
     currentLoc_ = 1111
     src_ = 1111
@@ -111,11 +117,11 @@ if __name__ == "__main__":
 
     flight = Flight(src_, dst_, takeoffTime_, airTime_, dist_)
     state = State(currentLoc_, flight, currentTime_)
-    data.append(state)
+    pq.put(state)
 
-    data = sorted(data, key=cmp_to_key(State.comparator))
-    for i in data:
-        print(i.flight.airTime)
+    small = pq.get()
+    big = pq.get()
+    print(big.flight.airTime)
 
 """
 import pandas as pd 
