@@ -96,9 +96,9 @@ if __name__=="__main__":
     
 
     if plotGrowthRate:
-        upperBound = 1000 # maximum number of flights to consider in loop
-        lowerBound = 100
-        step = 10
+        upperBound = 15000 # maximum number of flights to consider in loop
+        lowerBound = 10000
+        step = 1000
         calcTime = [] # stores timeDelta for finding solution
         inputSize = [] # stores the input size for the respective timeDelta
         src = 10980 # src airport id
@@ -111,11 +111,10 @@ if __name__=="__main__":
             airportList = random.sample(d, 2)
             solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], i)
             t1 = time.time()
-            
-            if solutionFound:
-                calcTime.append(t1-t0)
-                inputSize.append(i)
-                print("Solution found")
+
+            calcTime.append(t1-t0)
+            inputSize.append(i)
+            print("Iteration: " + str(i))
 
         plt.plot(inputSize, calcTime)
         plt.title('Calculation Time VS Number of Flights Considered Per Node')
