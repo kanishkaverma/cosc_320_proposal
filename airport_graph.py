@@ -15,6 +15,9 @@ class Flight:
         self.airTime = airTime
         self.dist=dist
 
+    def __str__(self):
+        return f"src: {self.src} dst: {self.dst} takeOffTime: {self.takeOffTime} airTime: {self.airTime} distance: {self.dist}"
+
 class Airport:
     def __init__(self, airPortId: int):
         self.flights = []
@@ -32,7 +35,10 @@ class Airport:
         self.flights.append(flight)
     
     def __str__(self):
-        return str(self.airportId) 
+        outputStr = f"AirportID:: {self.airportId} \n"
+        for flight in self.flights:
+            outputStr += f"\t {flight.__str__()}"
+        return outputStr
         
 # This is a directed graph class for use in this course.
 # It can also be used as an undirected graph by adding edges in both directions.
@@ -59,9 +65,9 @@ class Graph:
 
     
     def __str__(self):
-        returnStr = "Airports are: \n"
-        returnStr += str(self.airports.keys())
-        return returnStr
+        outputStr = "For this entire graph, the airports are: "
+        for airportId in self.airports.keys():
+            outputStr += f"{self.airports[airportId].__str__()}\n"
 
 class State:
     def __init__(self, currentLoc: int, flight: Flight, currentTime):
