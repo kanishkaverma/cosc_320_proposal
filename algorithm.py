@@ -3,8 +3,9 @@ from graph_from_csv import makeGraph
 import airport_graph as ag
 from queue import PriorityQueue
 import copy
+import random
 
-graph = makeGraph('./flight_data_cleaned_final.csv', 10)
+#graph = makeGraph('./flight_data_cleaned_final.csv', 10)
 # add to currentime by flight time. when checking the weighting time, get difference between currenttime
 #current time = deptime + air time
 # def solution(flights, src, dst, s):
@@ -49,12 +50,13 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
         print("The src and destination are not both in the graph")
         return []
     else:
-        startState = ag.State(src,startTime)
+        startState = ag.State(src,None,startTime,[])
         pq = PriorityQueue()
         pq.put(startState)
         while not pq.empty():
             currentState = pq.get()
             if currentState.currentLoc == dst:
+                currentState.pastStates.append(currentState)
                 return currentState.pastStates
             else:
                 currentAirport = G.airports[currentState.currentLoc]
@@ -74,3 +76,8 @@ if __name__=="__main__":
     G.addAirport(2)
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
+
+    GReal = makeGraph("flight_data_cleaned_final.csv", 65000)
+    d = list(GReal.airports.keys())
+    airportList = random.sample(d, 2)
+    realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
