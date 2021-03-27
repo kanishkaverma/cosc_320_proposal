@@ -3,9 +3,10 @@
 from functools import cmp_to_key
 from queue import PriorityQueue
 # Constants we are going to use
-PRICE_PER_DISTANCE = 1
-PRICE_PER_FLIGHT_TIME = 2
-PRICE_PER_WAIT_TIME = 3
+PRICE_PER_DISTANCE = 2.80/40
+PRICE_PER_FLIGHT_TIME = 13
+PRICE_PER_WAIT_TIME = 10
+OFFLOADTIME = 10*60
 
 class Flight:
     def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
@@ -24,22 +25,34 @@ class Airport:
         self.airportId = airPortId
         # useful for DFS
         self.status = "unvisited"
-        
+
     def hasFlight(self,dst: int):
         for flight in self.flights:
             if flight.dst == dst:
                 return True
         return False
-        
+
     def addFlight(self, flight: Flight):
         self.flights.append(flight)
-    
+
+    # def __repr__(self):
+    #     return {'name':self.name}
+
     def __str__(self):
         outputStr = f"AirportID:: {self.airportId} \n"
         for flight in self.flights:
             outputStr += f"\t {flight.__str__()}"
         return outputStr
-        
+
+    def sortByTakeOffTime(self):
+        def comparator(a, b):
+            if a.takeOffTime < b.takeOffTime:
+                return -1
+            if a.takeOffTime > b.takeOffTime:
+                return 1
+            return 0
+        self.flights = sorted(self.flights, key=cmp_to_key(comparator))
+
 # This is a directed graph class for use in this course.
 # It can also be used as an undirected graph by adding edges in both directions.
 class Graph:
@@ -48,13 +61,12 @@ class Graph:
 
     def addAirport(self, airportId: int) -> bool:
         if airportId in self.airports:
-            print("Airport already added")
             return False
         else:
             newAirport = Airport(airportId)
             self.airports[airportId] = newAirport
             return True
-        
+
     # add a flight to the graph
     def addFlight(self, flight: Flight) -> bool:
         if flight.src not in self.airports:
@@ -63,7 +75,7 @@ class Graph:
         else:
             self.airports[flight.src].addFlight(flight)
 
-    
+
     def __str__(self):
         outputStr = "For this entire graph, the airports are: \n\n\n"
         for airportId in self.airports.keys():
@@ -71,11 +83,27 @@ class Graph:
         return outputStr
 
 class State:
-    def __init__(self, currentLoc: int, flight: Flight, currentTime):
+    # "Counstructor" for inital state
+    def startState(self, currentLoc: int, currentTime: int):
+        self.flight = None
+        self.currentTime = None
+        self.currentLoc = currentLoc
+        self.waitTime = 0
+        self.cost = 0
+        self.pastStates = []
+        self.endTime = currentTime
+
+    def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list, currentCostTotal: float):
+        if flight == None:
+            self.startState(currentLoc, currentTime)
+            return
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
-        self.cost = self.getCost()
+        self.waitTime = flight.takeOffTime - currentTime
+        self.cost = currentCostTotal + self.getCost()
+        self.pastStates = pastStates
+        self.endTime = self.currentTime + self.waitTime + OFFLOADTIME
 
     def __eq__(self, other):
         return self.cost == other.cost
@@ -85,53 +113,49 @@ class State:
 
     def __gt__(self, other):
         return self.cost > other.cost
-    
+
     def getCost(self):
-        waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
-        flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
+        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
+        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
 
-    # def comparator(a, b):
-    #     if a.cost < b.cost:
-    #         return -1
-    #     if a.cost > b.cost:
-    #         return 1
-    #     return 0
+    def __str__():
+        return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src} dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime} airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
 
 if __name__ == "__main__":
-    print("Hello")
-    pq = PriorityQueue()
-    currentLoc = 1111
+    airportOne = Airport(1234)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 3980
+    airTime = 400
+    dist = 100
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    airportOne.addFlight(flight)
+
     src = 1111
     dst = 2222
     takeoffTime = 1980
     airTime = 400
     dist = 100
-    currentTime = 1940
-
     flight = Flight(src, dst, takeoffTime, airTime, dist)
-    state = State(currentLoc, flight, currentTime)
-    pq.put(state)
+    airportOne.addFlight(flight)
 
-    currentLoc_ = 1111
-    src_ = 1111
-    dst_ = 2222
-    takeoffTime_ = 1980
-    airTime_ = 121
-    dist_ = 30
-    currentTime_ = 1940
+    src = 1111
+    dst = 2222
+    takeoffTime = 2980
+    airTime = 400
+    dist = 100
+    flight = Flight(src, dst, takeoffTime, airTime, dist)
+    airportOne.addFlight(flight)
 
-    flight = Flight(src_, dst_, takeoffTime_, airTime_, dist_)
-    state = State(currentLoc_, flight, currentTime_)
-    pq.put(state)
+    airportOne.sortByTakeOffTime()
+    print(airportOne.flights[2].takeOffTime)
 
-    small = pq.get()
-    big = pq.get()
-    print(big.flight.airTime)
 
 """
-import pandas as pd 
+import pandas as pd
 
 df = pd.read_csv('flight_data_cleaned.csv')
 df.head()
