@@ -86,9 +86,11 @@ class Graph:
 class State:
     def __init__(self, currentLoc: int, flight: Flight, currentTime: int, pastStates: list):
         if flight == None: # special case: first state we are putting in graph
+            self.currentLoc = currentLoc
             self.cost = 0
             self.endTime = currentTime
-
+            self.pastStates = []
+            return
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc

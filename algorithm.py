@@ -67,7 +67,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
         return []
 
 if __name__=="__main__":
-    G = ag.Graph
+    G = ag.Graph()
     f1 = ag.Flight(1,2,3,4,100)
     G.addAirport(1)
     G.addAirport(2)
