@@ -7,7 +7,7 @@ import pandas as pd
 def makeGraph(path_to_csv,n): 
     df = pd.read_csv(path_to_csv, parse_dates=['FlightDate_DepTime'])
 
-    dg = df.sample( n, axis=0)
+    dg = df.sample(n, axis=0)
     flight_graph = Graph()
     
     for index, row in dg.iterrows():
@@ -18,6 +18,6 @@ def makeGraph(path_to_csv,n):
     
 
     return flight_graph
-# makeGraph("./data/flight_data_cleaned_final.csv", 10)
+print(makeGraph("flight_data_cleaned_final.csv", 10))
 
 
