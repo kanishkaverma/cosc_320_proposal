@@ -1,8 +1,12 @@
 from queue import PriorityQueue
-# add to currentime by flight time. when checking the weighting time, get difference between currenttime
+from graph_from_csv import makeGraph
+import airport_graph as ag
 
+graph = makeGraph('./flight_data_cleaned_final.csv', 10)
+# add to currentime by flight time. when checking the weighting time, get difference between currenttime
+#current time = deptime + air time
 # def solution(flights, src, dst, s):
-# 	pq = PriorityQueue(StateComparator())
+# 	pq = PriorityQueue()
 # 	initState = State(src, s)
 # 	pq.add(initState)
 # 	visitedStates = []
@@ -19,10 +23,19 @@ from queue import PriorityQueue
 # return null // In the event all possible states were checked and there was no possible flight
 
 
-def solution(flights, src, dst, s):
+def solution(graph, flights, src, dst, s):
     pq = PriorityQueue()
-    initstate = State(src, s)
-    pd.add(initState)
+    initState = [] #State(src, flights, )
+    pq.add(initState)
+    visitedStates = []
+    while pq.empty()== False: 
+        currentState = pq.pop()
+        if currentState.currentAirport == dst:
+            return currentState.prevFlights 
 
-
-def State(src, s):
+def realSolution(G: ag.Graph, src: int, dst: int, startTime: s):
+    if src not in G.airports or dst not in G.airports:
+        print("The src and destination are not both in the graph")
+        return []
+    else:
+        

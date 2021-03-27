@@ -6,6 +6,7 @@ from queue import PriorityQueue
 PRICE_PER_DISTANCE = 1
 PRICE_PER_FLIGHT_TIME = 2
 PRICE_PER_WAIT_TIME = 3
+OFFLOADTIME = 10*60
 
 class Flight:
     def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
@@ -83,11 +84,13 @@ class Graph:
         return outputStr
 
 class State:
-    def __init__(self, currentLoc: int, flight: Flight, currentTime):
+    def __init__(self, currentLoc: int, flight: Flight, currentTime, pastStates: list):
         self.flight = flight
         self.currentTime = currentTime
         self.currentLoc = currentLoc
+        self.waitTime = flight.takeOffTime - currentTime
         self.cost = self.getCost()
+        self.pastStates = pastStates
 
     def __eq__(self, other):
         return self.cost == other.cost
@@ -99,7 +102,7 @@ class State:
         return self.cost > other.cost
     
     def getCost(self):
-        waitCost = (self.flight.takeOffTime-self.currentTime)*PRICE_PER_WAIT_TIME
+        waitCost = (self.waitTime/60)*PRICE_PER_WAIT_TIME
         flightTimeCost = (self.flight.airTime)*PRICE_PER_FLIGHT_TIME 
         distCost = self.flight.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
