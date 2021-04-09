@@ -16,9 +16,28 @@ class Flight:
         self.takeOffTime = takeOffTime
         self.airTime = airTime
         self.dist=dist
+        self.postFlightTime = takeOffTime + airTime + OFFLOADTIME
+
+    def calcCost(self, currentTime: int):
+        # This flight is already expired
+        if currentTime > self.takeOffTime:
+            return float('inf')
+        # Flight is not expired, get cost from current time
+        waitTime = takeoffTime - currentTime
+        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
+        flightTimeCost = (self.airTime/60/60)*PRICE_PER_FLIGHT_TIME
+        distCost = self.dist * PRICE_PER_DISTANCE
+        return  waitCost + flightTimeCost + distCost
 
     def __str__(self):
         return f"src: {self.src} dst: {self.dst} takeOffTime: {self.takeOffTime} airTime: {self.airTime} distance: {self.dist}\n"
+
+class costFlightIntersection:
+    def __init__(self, flight: Flight, currentTime: int):
+        self.cost = flight.calcCost(currentTime)
+    
+    def reCalculate(self, currentTime: int):
+        self.cost = flight.calcCost(currentTime)
 
 class Airport:
     def __init__(self, airPortId: int):
@@ -116,10 +135,7 @@ class State:
         return self.cost > other.cost
 
     def getCost(self):
-        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
-        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME
-        distCost = self.flight.dist * PRICE_PER_DISTANCE
-        return  waitCost + flightTimeCost + distCost
+        return self.flight.calcCost(self.currentTime)
 
     def __str__():
         return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src} dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime} airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
