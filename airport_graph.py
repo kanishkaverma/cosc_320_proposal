@@ -41,6 +41,9 @@ class costFlightIntersection:
         self.cost = flight.calcCost(currentTime)
         return self.cost
     
+    def addCost(self, costAddition: int):
+        self.cost += costAddition
+    
     def __eq__(self, other):
         return self.cost == other.cost
 

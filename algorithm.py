@@ -41,7 +41,7 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
 def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
     if currentLoc == dst:
         return currentSolution
-    # Update our network of airports for the current time
+    # Update our network of airports for the current time, and reset visited
     G.updateAirports(currentTime)
     # Get the current shortest path
     djkstraSolution = djkstraPath(G, currentLoc, dst, currentTime)
@@ -64,10 +64,23 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
             pq.put(flight)
         while not pq.empty():
             currentFlightCostIntersection = pq.get()
+            currentCost = currentFlightCostIntersection.cost
+            # If we took a flight to our destination: we found our route
+            if currentFlightCostIntersection.flight.dst == dst:
+                return
+            # If we could not find a solution, we are looking at invalid and impossible edges
+            if currentCost == float("inf"): 
+                return []
+            # This is an intermediate airport to a possible solution: add current flights, flag as visited
             currentAirport = G.airports[currentFlightCostIntersection.flight.dst]
-            if not currentAirport.visited:
+            if not currentAirport.visited: # Avoid visiting the same airport twice
                 for flight in currentAirport.costFlightIntersections:
-                    pq.put(flight)
+                    if flight.cost < float("inf"): # avoid adding to infinity for safety
+                        flight.addCost(currentCost)
+                        pq.put(flight)
+                currentAirport.visited = True
+            else: # For readability: if we visited this airport before, just skip it
+                continue
 
 
 
