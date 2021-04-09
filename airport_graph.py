@@ -34,6 +34,7 @@ class Flight:
 
 class costFlightIntersection:
     def __init__(self, flight: Flight, currentTime: int):
+        self.flight = flight
         self.cost = flight.calcCost(currentTime)
     
     def reCalculate(self, currentTime: int):

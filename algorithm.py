@@ -64,7 +64,11 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
             pq.put(flight)
         while not pq.empty():
             currentFlightCostIntersection = pq.get()
-            currentAirport = currentFlightCostIntersection.flight.dst
+            currentAirport = G.airports[currentFlightCostIntersection.flight.dst]
+            if not currentAirport.visited:
+                for flight in currentAirport.costFlightIntersections:
+                    pq.put(flight)
+
 
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
