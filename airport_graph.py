@@ -97,7 +97,10 @@ class Graph:
             return False
         else:
             self.airports[flight.src].addFlight(flight)
-
+    
+    def updateAirports(self, currentTime: int):
+        for airportId in self.airports.keys():
+            self.airports[airportId].updateCostIntersections(currentTime)
 
     def __str__(self):
         outputStr = "For this entire graph, the airports are: \n\n\n"
