@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 # 	visitedStates.append(new State)
 # return null // In the event all possible states were checked and there was no possible flight
 
-plotGrowthRate = True
+plotGrowthRate = False
 
 def solution(graph, flights, src, dst, s):
     pq = PriorityQueue()
@@ -46,13 +46,12 @@ def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
             print("There was no solution found")  
         return False  
     else:
-        if not plotGrowthRate:
+        if not plotGrowthRate
             print(f"The solution from {src} to {dst} is ")
-        for state in ourSolution:
-            if state.flight != None:
-                if not plotGrowthRate:
+            for state in ourSolution:
+                if state.flight != None:
                     print(state.flight)
-        if not plotGrowthRate:
+            print(ourSolution[len(ourSolution)-1].cost)
             print(ourSolution[len(ourSolution)-1].cost)
         return True
 
