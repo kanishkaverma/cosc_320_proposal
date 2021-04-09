@@ -2,3 +2,4 @@ data/
 .vscode/settings.json
 .vscode/.ropeproject/config.py
 __pycache__/airport_graph.cpython-39.pyc
+__pycache__/graph_from_csv.cpython-39.pyc

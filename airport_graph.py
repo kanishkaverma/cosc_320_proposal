@@ -24,7 +24,7 @@ class Flight:
         if currentTime > self.takeOffTime:
             return float('inf')
         # Flight is not expired, get cost from current time
-        waitTime = takeoffTime - currentTime
+        waitTime = self.takeOffTime - currentTime
         waitCost = (waitTime/60/60)*PRICE_PER_WAIT_TIME
         flightTimeCost = (self.airTime/60/60)*PRICE_PER_FLIGHT_TIME
         distCost = self.dist * PRICE_PER_DISTANCE
@@ -39,7 +39,7 @@ class costFlightIntersection:
         self.cost = flight.calcCost(currentTime)
     
     def reCalculate(self, currentTime: int):
-        self.cost = flight.calcCost(currentTime)
+        self.cost = self.flight.calcCost(currentTime)
         return self.cost
     
     def addCost(self, costAddition: int):
@@ -54,15 +54,16 @@ class costFlightIntersection:
     def __gt__(self, other):
         return self.cost > other.cost
 
+
 class flightPath:
-    def __init__(self, flight: costFlightIntersection, prevFlightPath: flightPath):
+    def __init__(self, flight: costFlightIntersection, prevFlightPath):
         if prevFlightPath == None:
-            self.cost = 0
+            self.cost = flight.cost
             self.flights = []
             return
         self.flights = copy.deepcopy(prevFlightPath.flights)
-        self.flights.append(flight)
-        self.cost = costFlightIntersection.cost
+        self.flights.append(flight.flight)
+        self.cost = flight.cost
 
     def __eq__(self, other):
         return self.cost == other.cost

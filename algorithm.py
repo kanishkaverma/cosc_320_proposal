@@ -36,6 +36,9 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
         return []
     currentSolution = []
     linkedStateHelper(G, src, dst, startTime, currentSolution)
+    print(f"The linked state solution from {src} to {dst} is:")
+    for flight in currentSolution:
+        print(flight)
     return currentSolution
 
 def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
@@ -63,15 +66,18 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
         return []
     else:
         pq = PriorityQueue()
+        pqPath = PriorityQueue()
         currentAirport = G.airports[src]
         for flight in currentAirport.costFlightIntersections:
             pq.put(flight)
+            pqPath.put(ag.flightPath(flight,None))
         while not pq.empty():
             currentFlightCostIntersection = pq.get()
+            currentPath = pqPath.get()
             currentCost = currentFlightCostIntersection.cost
             # If we took a flight to our destination: we found our route
             if currentFlightCostIntersection.flight.dst == dst:
-                return
+                return currentPath.flights
             # If we could not find a solution, we are looking at invalid and impossible edges
             if currentCost == float("inf"): 
                 return []
@@ -82,6 +88,7 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
                     if flight.cost < float("inf"): # avoid adding to infinity for safety
                         flight.addCost(currentCost)
                         pq.put(flight)
+                        pqPath.put(ag.flightPath(flight,currentPath))
                 currentAirport.visited = True
             else: # For readability: if we visited this airport before, just skip it
                 continue
@@ -96,12 +103,12 @@ def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
             print("There was no solution found")  
         return False  
     else: # There was a solution
-        if not plotGrowthRate
+        if not plotGrowthRate:
             print(f"The solution from {src} to {dst} is ")
             for state in ourSolution:
                 if state.flight != None:
                     print(state.flight)
-            print(ourSolution[len(ourSolution)-1].cost)
+            print(f'The cost is: {ourSolution[len(ourSolution)-1].cost}')
         return True
 
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
@@ -148,6 +155,9 @@ if __name__=="__main__":
     G.addAirport(2)
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
+    linkedState(G,1,2,1)
+
+    input("Pausing before going any further")
         
     
 
