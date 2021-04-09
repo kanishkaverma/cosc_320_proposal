@@ -29,15 +29,28 @@ import matplotlib.pyplot as plt
 
 plotGrowthRate = False
 
-def solution(graph, flights, src, dst, s):
-    pq = PriorityQueue()
-    initState = [] #State(src, flights, )
-    pq.add(initState)
-    visitedStates = []
-    while pq.empty()== False: 
-        currentState = pq.pop()
-        if currentState.currentAirport == dst:
-            return currentState.prevFlights 
+def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
+    if src not in G.airports or dst not in G.airports:
+        if not plotGrowthRate: 
+            print("The src and destination are not both in the graph")
+        return []
+    currentSolution = []
+    linkedStateHelper(G, src, dst, startTime, currentSolution)
+    return currentSolution
+
+def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list):
+    if currentLoc == dst:
+        return currentSolution
+    # Update our network of airports for the current time
+    G.updateAirports(currentTime)
+    djkstraSolution = djkstraPath(G, currentLoc, dst, currentTime)
+    if len(djkstraSolution) == 0:
+        return None
+    currentSolution.append(djkstraSolution[0])
+
+def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int):
+
+
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
     ourSolution = realSolution(G,src,dst,startTime)
