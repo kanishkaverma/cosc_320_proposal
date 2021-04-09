@@ -38,18 +38,22 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     linkedStateHelper(G, src, dst, startTime, currentSolution)
     return currentSolution
 
-def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list):
+def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
     if currentLoc == dst:
         return currentSolution
     # Update our network of airports for the current time
     G.updateAirports(currentTime)
+    # Get the current shortest path
     djkstraSolution = djkstraPath(G, currentLoc, dst, currentTime)
+
+    # There is no available path from the currentLocation in time to the solution: path is impossible
     if len(djkstraSolution) == 0:
         return None
     currentSolution.append(djkstraSolution[0])
+    linkedStateHelper(G, djkstraSolution[0].dst, dst, djkstraSolution[0].postFlightTime, currentSolution)
 
-def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int):
-
+def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an array of flights
+    
 
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
