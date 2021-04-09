@@ -7,6 +7,7 @@ PRICE_PER_DISTANCE = 2.80/40
 PRICE_PER_FLIGHT_TIME = 13
 PRICE_PER_WAIT_TIME = 10
 OFFLOADTIME = 10*60
+# __name__ = "__main__"
 
 class Flight:
     def __init__(self, src: int, dst: int, takeOffTime, airTime: int, dist: int):
@@ -128,30 +129,14 @@ if __name__ == "__main__":
 
     src = 1111
     dst = 2222
-    takeoffTime = 3980
-    airTime = 400
-    dist = 100
-    flight = Flight(src, dst, takeoffTime, airTime, dist)
-    airportOne.addFlight(flight)
-
-    src = 1111
-    dst = 2222
     takeoffTime = 1980
     airTime = 400
     dist = 100
     flight = Flight(src, dst, takeoffTime, airTime, dist)
     airportOne.addFlight(flight)
 
-    src = 1111
-    dst = 2222
-    takeoffTime = 2980
-    airTime = 400
-    dist = 100
-    flight = Flight(src, dst, takeoffTime, airTime, dist)
-    airportOne.addFlight(flight)
-
     airportOne.sortByTakeOffTime()
-    print(airportOne.flights[2].takeOffTime)
+    print(airportOne.flights[0].takeOffTime)
 
 
 """

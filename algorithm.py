@@ -4,6 +4,8 @@ import airport_graph as ag
 from queue import PriorityQueue
 import copy
 import random
+import time
+import matplotlib.pyplot as plt
 
 #graph = makeGraph('./flight_data_cleaned_final.csv', 10)
 # add to currentime by flight time. when checking the weighting time, get difference between currenttime
@@ -25,6 +27,7 @@ import random
 # 	visitedStates.append(new State)
 # return null // In the event all possible states were checked and there was no possible flight
 
+plotGrowthRate = True
 
 def solution(graph, flights, src, dst, s):
     pq = PriorityQueue()
@@ -39,17 +42,24 @@ def solution(graph, flights, src, dst, s):
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
     ourSolution = realSolution(G,src,dst,startTime)
     if len(ourSolution) == 0:
-        print("There was no solution found")    
+        if not plotGrowthRate:
+            print("There was no solution found")  
+        return False  
     else:
-        print(f"The solution from {src} to {dst} is ")
+        if not plotGrowthRate:
+            print(f"The solution from {src} to {dst} is ")
         for state in ourSolution:
             if state.flight != None:
-                print(state.flight)
-        print(ourSolution[len(ourSolution)-1].cost)
+                if not plotGrowthRate:
+                    print(state.flight)
+        if not plotGrowthRate:
+            print(ourSolution[len(ourSolution)-1].cost)
+        return True
 
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
-        print("The src and destination are not both in the graph")
+        if not plotGrowthRate: 
+            print("The src and destination are not both in the graph")
         return []
     else:
         startState = ag.State(src,None,startTime,[], 0)
@@ -68,20 +78,54 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                     if flight.takeOffTime > currentState.endTime:
                         newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
                         pq.put(newState)
-        print("There was no path that made a solution possible")
+        if not plotGrowthRate:
+            print("There was no path that made a solution possible")
         return []
 
 if __name__=="__main__":
 
     # First test case: can it find a direclty connecting edge?
-    G = ag.Graph()
-    f1 = ag.Flight(1,2,3,4,100)
+
+    G = ag.Graph() # initialize graph
+    f1 = ag.Flight(1,2,3,4,100) # add flight
     G.addAirport(1)
     G.addAirport(2)
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
+        
+    
 
-    GReal = makeGraph("flight_data_cleaned_final.csv", 20000)
-    d = list(GReal.airports.keys())
-    airportList = random.sample(d, 2)
-    realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
+    if plotGrowthRate:
+        upperBound = 500 # maximum number of flights to consider in loop
+        lowerBound = 100
+        step = 10
+        calcTime = [] # stores timeDelta for finding solution
+        inputSize = [] # stores the input size for the respective timeDelta
+        src = 10980 # src airport id
+        dst = 12896 # destination airport id
+        
+        for i in range(lowerBound, upperBound, step):
+            GReal = makeGraph("flight_data_cleaned_final.csv", i)
+            d = list(GReal.airports.keys())
+            t0 = time.time()
+            airportList = random.sample(d, 2)
+            solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
+            t1 = time.time()
+            if not solutionFound:
+                calcTime.append(t1-t0)
+                inputSize.append(i)
+                print("Iteration: " + str(i))
+
+        plt.plot(inputSize, calcTime)
+        plt.title('Calculation Time VS Number of Flights Considered Per Node')
+        plt.xlabel('Input')
+        plt.ylabel('Calculation Time')
+        plt.show()
+
+    else:
+        GReal = makeGraph("flight_data_cleaned_final.csv", 50)
+        d = list(GReal.airports.keys())
+        airportList = random.sample(d, 2)
+        realSolutionHelper(GReal,airportList[0],airportList[1], 20000)
+
+    
