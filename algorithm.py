@@ -53,7 +53,12 @@ def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, 
     linkedStateHelper(G, djkstraSolution[0].dst, dst, djkstraSolution[0].postFlightTime, currentSolution)
 
 def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an array of flights
-    
+    if src not in G.airports or dst not in G.airports:
+        if not plotGrowthRate: 
+            print("The src and destination are not both in the graph")
+        return []
+    else:
+        pq = PriorityQueue()
 
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
