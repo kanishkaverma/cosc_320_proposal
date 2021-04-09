@@ -39,6 +39,7 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     return currentSolution
 
 def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
+    # We arrived where we trying to get
     if currentLoc == dst:
         return currentSolution
     # Update our network of airports for the current time, and reset visited
@@ -49,10 +50,13 @@ def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, 
     # There is no available path from the currentLocation in time to the solution: path is impossible
     if len(djkstraSolution) == 0:
         return None
+    # Add our step we got to the current solution
     currentSolution.append(djkstraSolution[0])
+    # Run function again, now from the new airport we are at
     linkedStateHelper(G, djkstraSolution[0].dst, dst, djkstraSolution[0].postFlightTime, currentSolution)
 
 def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an array of flights
+    # Both src and dst are not in graph: solution is impossible
     if src not in G.airports or dst not in G.airports:
         if not plotGrowthRate: 
             print("The src and destination are not both in the graph")
@@ -86,42 +90,50 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
     ourSolution = realSolution(G,src,dst,startTime)
+    # There was no solution
     if len(ourSolution) == 0:
         if not plotGrowthRate:
             print("There was no solution found")  
         return False  
-    else:
+    else: # There was a solution
         if not plotGrowthRate
             print(f"The solution from {src} to {dst} is ")
             for state in ourSolution:
                 if state.flight != None:
                     print(state.flight)
             print(ourSolution[len(ourSolution)-1].cost)
-            print(ourSolution[len(ourSolution)-1].cost)
         return True
 
 def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
+    # If our nodes are not both in the graph, obviously impossible
     if src not in G.airports or dst not in G.airports:
         if not plotGrowthRate: 
             print("The src and destination are not both in the graph")
         return []
     else:
+        # Create an inital state, place in pq
         startState = ag.State(src,None,startTime,[], 0)
         pq = PriorityQueue()
         pq.put(startState)
         while not pq.empty():
+            # Get the current state
             currentState = pq.get()
+            # If we arrived at our destination, add current state to our solution, and return it
             if currentState.currentLoc == dst:
                 currentState.pastStates.append(currentState)
                 return currentState.pastStates
-            else:
+            else: # Intermediate node: add all the new states we can reach from this state
+                # Get current airport, and copy the current states (so we can alter freely)
                 currentAirport = G.airports[currentState.currentLoc]
                 newPastStates = copy.deepcopy(currentState.pastStates)
+                # Add current state to this states working solution
                 newPastStates.append(currentState)
+                # Add all the valid states from this airport at this point in time
                 for flight in currentAirport.flights:
                     if flight.takeOffTime > currentState.endTime:
                         newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
                         pq.put(newState)
+        # There was no solution, we fully explored literally every state
         if not plotGrowthRate:
             print("There was no path that made a solution possible")
         return []
