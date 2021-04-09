@@ -45,7 +45,7 @@ class Airport:
         self.flights = []
         self.airportId = airPortId
         # useful for DFS
-        self.status = "unvisited"
+        self.visited = False
         self.costFlightIntersections = []
 
     def hasFlight(self,dst: int):
@@ -102,6 +102,8 @@ class Graph:
     def updateAirports(self, currentTime: int):
         for airportId in self.airports.keys():
             self.airports[airportId].updateCostIntersections(currentTime)
+            # reset visited states of airports
+            self.airports[airportId].visited = False
 
     def __str__(self):
         outputStr = "For this entire graph, the airports are: \n\n\n"
