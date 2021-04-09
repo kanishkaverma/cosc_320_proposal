@@ -2,6 +2,7 @@
 # First, Vertex and Graph classes for directed graphs
 from functools import cmp_to_key
 from queue import PriorityQueue
+import copy
 # Constants we are going to use
 PRICE_PER_DISTANCE = 2.80/40
 PRICE_PER_FLIGHT_TIME = 13
@@ -44,6 +45,25 @@ class costFlightIntersection:
     def addCost(self, costAddition: int):
         self.cost += costAddition
     
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
+
+class flightPath:
+    def __init__(self, flight: costFlightIntersection, prevFlightPath: flightPath):
+        if prevFlightPath == None:
+            self.cost = 0
+            self.flights = []
+            return
+        self.flights = copy.deepcopy(prevFlightPath.flights)
+        self.flights.append(flight)
+        self.cost = costFlightIntersection.cost
+
     def __eq__(self, other):
         return self.cost == other.cost
 
