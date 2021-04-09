@@ -170,6 +170,30 @@ if __name__ == "__main__":
     airportOne.sortByTakeOffTime()
     print(airportOne.flights[0].takeOffTime)
 
+    s = PriorityQueue()
+    src = 1111
+    dst = 2222
+    takeoffTime = 1980
+    airTime = 400
+    dist = 100
+    flight1 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip1 = costFlightIntersection(flight1, 2)
+    s.put(trip1)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 3000
+    airTime = 1000
+    dist = 500
+    flight2 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip2 = costFlightIntersection(flight2, 2)
+    s.put(trip2)
+
+    item = s.get()
+    print(item.flight.airTime)
+    item2 = s.get()
+    print(item2.flight.airTime)
+
 
 """
 import pandas as pd
