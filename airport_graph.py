@@ -39,6 +39,15 @@ class costFlightIntersection:
     def reCalculate(self, currentTime: int):
         self.cost = flight.calcCost(currentTime)
         return self.cost
+    
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
 
 class Airport:
     def __init__(self, airPortId: int):
