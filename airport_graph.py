@@ -39,6 +39,15 @@ class costFlightIntersection:
     def reCalculate(self, currentTime: int):
         self.cost = flight.calcCost(currentTime)
         return self.cost
+    
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
 
 class Airport:
     def __init__(self, airPortId: int):
@@ -162,6 +171,30 @@ if __name__ == "__main__":
 
     airportOne.sortByTakeOffTime()
     print(airportOne.flights[0].takeOffTime)
+
+    s = PriorityQueue()
+    src = 1111
+    dst = 2222
+    takeoffTime = 1980
+    airTime = 400
+    dist = 100
+    flight1 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip1 = costFlightIntersection(flight1, 2)
+    s.put(trip1)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 3000
+    airTime = 1000
+    dist = 500
+    flight2 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip2 = costFlightIntersection(flight2, 2)
+    s.put(trip2)
+
+    item = s.get()
+    print(item.flight.airTime)
+    item2 = s.get()
+    print(item2.flight.airTime)
 
 
 """
