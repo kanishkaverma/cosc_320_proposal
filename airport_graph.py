@@ -45,6 +45,7 @@ class Airport:
         self.airportId = airPortId
         # useful for DFS
         self.status = "unvisited"
+        self.costFlightIntersections = []
 
     def hasFlight(self,dst: int):
         for flight in self.flights:
@@ -54,9 +55,11 @@ class Airport:
 
     def addFlight(self, flight: Flight):
         self.flights.append(flight)
+        self.costFlightIntersections.append(costFlightIntersection(flight, 0))
 
-    # def __repr__(self):
-    #     return {'name':self.name}
+    def updateCostIntersections(self, currentTime: int):
+        for intersection in self.costFlightIntersections:
+            intersection.reCalculate(currentTime)
 
     def __str__(self):
         outputStr = f"AirportID:: {self.airportId} \n"
