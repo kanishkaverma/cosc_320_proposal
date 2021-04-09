@@ -24,7 +24,7 @@ class Flight:
             return float('inf')
         # Flight is not expired, get cost from current time
         waitTime = takeoffTime - currentTime
-        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
+        waitCost = (waitTime/60/60)*PRICE_PER_WAIT_TIME
         flightTimeCost = (self.airTime/60/60)*PRICE_PER_FLIGHT_TIME
         distCost = self.dist * PRICE_PER_DISTANCE
         return  waitCost + flightTimeCost + distCost
@@ -144,7 +144,7 @@ class State:
     def getCost(self):
         return self.flight.calcCost(self.currentTime)
 
-    def __str__():
+    def __str__(self):
         return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src} dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime} airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
 
 if __name__ == "__main__":
