@@ -49,7 +49,6 @@ def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, 
     G.updateAirports(currentTime)
     # Get the current shortest path
     djkstraSolution = djkstraPath(G, currentLoc, dst, currentTime)
-
     # There is no available path from the currentLocation in time to the solution: path is impossible
     if len(djkstraSolution) == 0:
         return None
@@ -88,7 +87,7 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
                     if flight.cost < float("inf"): # avoid adding to infinity for safety
                         flight.addCost(currentCost)
                         pq.put(flight)
-                        pqPath.put(ag.flightPath(flight,currentPath))
+                        pqPath.put(ag.flightPath(flight,currentPath.flights))
                 currentAirport.visited = True
             else: # For readability: if we visited this airport before, just skip it
                 continue
@@ -137,7 +136,7 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                 newPastStates.append(currentState)
                 # Add all the valid states from this airport at this point in time
                 for flight in currentAirport.flights:
-                    if flight.takeOffTime > currentState.endTime:
+                    if flight.takeOffTime > currentState.endTime and not currentState.hasVisitedPreviously(flight.dst):
                         newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
                         pq.put(newState)
         # There was no solution, we fully explored literally every state
@@ -155,9 +154,10 @@ if __name__=="__main__":
     G.addAirport(2)
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
+    print("Starting linked state")
     linkedState(G,1,2,1)
 
-    input("Pausing before going any further")
+    input("Pausing before going any further \n")
         
     
 
@@ -189,9 +189,10 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        GReal = makeGraph("flight_data_cleaned_final.csv", 50)
+        GReal = makeGraph("flight_data_cleaned_final.csv", 20000)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
         realSolutionHelper(GReal,airportList[0],airportList[1], 20000)
+        linkedState(GReal,airportList[0],airportList[1], 20000)
 
     

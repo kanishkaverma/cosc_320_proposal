@@ -53,15 +53,18 @@ class costFlightIntersection:
 
     def __gt__(self, other):
         return self.cost > other.cost
+    
+    def __str__(self):
+        return f'{self.flight.__str__()} cost: {self.cost} \n' 
 
 
 class flightPath:
-    def __init__(self, flight: costFlightIntersection, prevFlightPath):
+    def __init__(self, flight: costFlightIntersection, prevFlightPath: list):
         if prevFlightPath == None:
             self.cost = flight.cost
-            self.flights = []
+            self.flights = [flight.flight]
             return
-        self.flights = copy.deepcopy(prevFlightPath.flights)
+        self.flights = copy.deepcopy(prevFlightPath)
         self.flights.append(flight.flight)
         self.cost = flight.cost
 
@@ -167,6 +170,13 @@ class State:
         self.cost = currentCostTotal + self.getCost()
         self.pastStates = pastStates
         self.endTime = self.currentTime + self.waitTime + OFFLOADTIME
+    
+    def hasVisitedPreviously(self, airportId: int) -> bool: 
+        for state in self.pastStates:
+            if state.flight != None:
+                if airportId == state.flight.dst:
+                    return True
+        return False
 
     def __eq__(self, other):
         return self.cost == other.cost
