@@ -230,7 +230,7 @@ if __name__=="__main__":
             linked_state_calctime.append(t3-t2)
             alt_state_2.append(t5-t4)
             inputSize.append(i)
-            
+
             V =  len(GReal.airports)
             E = i
             y = V*math.log(E)*0.00001
@@ -248,9 +248,9 @@ if __name__=="__main__":
             
         plt.plot(inputSize,estimated_runtime,label='estimated run time') 
 
-        plt.plot(inputSize, calcTime,label="djikstras algo")
-        plt.plot(inputSize, linked_state_calctime,label="linked-state")
-        plt.plot(inputSize, alt_state_2,label="alt-state-2")
+        plt.plot(inputSize, calcTime,label="state-algo")
+        plt.plot(inputSize, linked_state_calctime,label="linked-state-algo")
+        plt.plot(inputSize, alt_state_2,label="alt-state-algo")
         plt.title('Calculation Time VS Number of Flights Considered Per Node')
         plt.xlabel('Input')
         plt.ylabel('Calculation Time')
