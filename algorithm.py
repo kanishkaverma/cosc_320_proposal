@@ -19,12 +19,12 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     solution = linkedStateHelper(G, src, dst, startTime, currentSolution)
     if solution == None or len(currentSolution) == 0:
         if not plotGrowthRate: 
-
             print(f"The linked state solution from {src} to {dst} does not exist!")
         return []
-    print(f"The linked state solution from {src} to {dst} is:")
-    for flight in currentSolution:
-        print(flight)
+    if not plotGrowthRate
+        print(f"The linked state solution from {src} to {dst} is:")
+        for flight in currentSolution:
+            print(flight)
     return currentSolution
 
 def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
