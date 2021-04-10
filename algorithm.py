@@ -203,9 +203,9 @@ if __name__=="__main__":
         
 
     if plotGrowthRate:
-        upperBound = 350# maximum number of flights to consider in loop
+        upperBound = 280# maximum number of flights to consider in loop
         lowerBound = 50
-        step = 10 
+        step = 6 
         calcTime = [] # stores timeDelta for finding solution
         linked_state_calctime = []
         alt_state_2 = []
