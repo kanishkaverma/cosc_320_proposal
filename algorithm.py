@@ -36,6 +36,8 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
         return []
     currentSolution = []
     linkedStateHelper(G, src, dst, startTime, currentSolution)
+    if len(currentSolution) == 0:
+        print(f"The linked state solution from {src} to {dst} does not exist!")
     print(f"The linked state solution from {src} to {dst} is:")
     for flight in currentSolution:
         print(flight)
@@ -91,7 +93,7 @@ def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an
                 currentAirport.visited = True
             else: # For readability: if we visited this airport before, just skip it
                 continue
-
+        return []
 
 
 def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
@@ -156,10 +158,7 @@ if __name__=="__main__":
     realSolutionHelper(G,1,2,1)
     print("Starting linked state")
     linkedState(G,1,2,1)
-
-    input("Pausing before going any further \n")
         
-    
 
     if plotGrowthRate:
         upperBound = 500 # maximum number of flights to consider in loop
@@ -189,10 +188,10 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        GReal = makeGraph("flight_data_cleaned_final.csv", 20000)
+        GReal = makeGraph("flight_data_cleaned_final.csv", 200)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
-        realSolutionHelper(GReal,airportList[0],airportList[1], 20000)
-        linkedState(GReal,airportList[0],airportList[1], 20000)
+        realSolutionHelper(GReal,airportList[0],airportList[1], 20)
+        linkedState(GReal,airportList[0],airportList[1], 20)
 
     
