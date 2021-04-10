@@ -7,26 +7,6 @@ import random
 import time
 import matplotlib.pyplot as plt
 
-#graph = makeGraph('./flight_data_cleaned_final.csv', 10)
-# add to currentime by flight time. when checking the weighting time, get difference between currenttime
-#current time = deptime + air time
-# def solution(flights, src, dst, s):
-# 	pq = PriorityQueue()
-# 	initState = State(src, s)
-# 	pq.add(initState)
-# 	visitedStates = []
-# 	while pq not empty:
-# 		currentState = pq.pop()
-#         if currentState.currentAirport == dst:
-#             return currentState.prevFlights
-#         for flight in flights[currentState.currentAirport]:
-#             if flight.startTime > currentState.currentTime and flight.dest not in currentState.prevFlights
-#               newState = State(flight, currentState)
-# If newState not in visitedStates
-# pq.add(newState)
-# 	visitedStates.append(new State)
-# return null // In the event all possible states were checked and there was no possible flight
-
 plotGrowthRate = False
 
 def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
@@ -35,9 +15,10 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
             print("The src and destination are not both in the graph")
         return []
     currentSolution = []
-    linkedStateHelper(G, src, dst, startTime, currentSolution)
-    if len(currentSolution) == 0:
+    solution = linkedStateHelper(G, src, dst, startTime, currentSolution)
+    if solution == None or len(currentSolution) == 0:
         print(f"The linked state solution from {src} to {dst} does not exist!")
+        return []
     print(f"The linked state solution from {src} to {dst} is:")
     for flight in currentSolution:
         print(flight)
@@ -101,7 +82,7 @@ def realSolutionHelper(G: ag.Graph, src: int, dst: int, startTime: int):
     # There was no solution
     if len(ourSolution) == 0:
         if not plotGrowthRate:
-            print("There was no solution found")  
+            print("There was no state solution found")  
         return False  
     else: # There was a solution
         if not plotGrowthRate:
@@ -139,11 +120,11 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
                 # Add all the valid states from this airport at this point in time
                 for flight in currentAirport.flights:
                     if flight.takeOffTime > currentState.endTime and not currentState.hasVisitedPreviously(flight.dst):
-                        newState = ag.State(flight.dst,flight,currentState.endTime,copy.deepcopy(newPastStates), currentState.cost)
+                        newState = ag.State(flight.dst,flight,currentState.endTime, copy.deepcopy(newPastStates), currentState.cost)
                         pq.put(newState)
         # There was no solution, we fully explored literally every state
         if not plotGrowthRate:
-            print("There was no path that made a solution possible")
+            print(f'There was no state solution between {src} and {dst} that made a solution possible')
         return []
 
 if __name__=="__main__":
@@ -156,7 +137,6 @@ if __name__=="__main__":
     G.addAirport(2)
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
-    print("Starting linked state")
     linkedState(G,1,2,1)
         
 
@@ -188,7 +168,7 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        GReal = makeGraph("flight_data_cleaned_final.csv", 200)
+        GReal = makeGraph("flight_data_cleaned_final.csv", 100)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
         realSolutionHelper(GReal,airportList[0],airportList[1], 20)
