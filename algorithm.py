@@ -17,7 +17,7 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
         return []
     currentSolution = []
     solution = linkedStateHelper(G, src, dst, startTime, currentSolution)
-    if solution == None or len(currentSolution) == 0:
+    if not solution or len(currentSolution) == 0:
         if not plotGrowthRate: 
             print(f"The linked state solution from {src} to {dst} does not exist!")
         return []
@@ -30,18 +30,18 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
 def linkedStateHelper(G: ag.Graph, currentLoc: int, dst: int, currentTime: int, currentSolution: list): # Returns a list of flights to take
     # We arrived where we trying to get
     if currentLoc == dst:
-        return currentSolution
+        return True
     # Update our network of airports for the current time, and reset visited
     G.updateAirports(currentTime)
     # Get the current shortest path
     djkstraSolution = djkstraPath(G, currentLoc, dst, currentTime)
     # There is no available path from the currentLocation in time to the solution: path is impossible
     if len(djkstraSolution) == 0:
-        return None
+        return False
     # Add our step we got to the current solution
     currentSolution.append(djkstraSolution[0])
     # Run function again, now from the new airport we are at
-    linkedStateHelper(G, djkstraSolution[0].dst, dst, djkstraSolution[0].postFlightTime, currentSolution)
+    return linkedStateHelper(G, djkstraSolution[0].dst, dst, djkstraSolution[0].postFlightTime, currentSolution)
 
 def djkstraPath(G: ag.Graph, src: int, dst: int, currentTime: int): # Returns an array of flights
     # Both src and dst are not in graph: solution is impossible
@@ -247,11 +247,13 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        GReal = makeGraph("flight_data_cleaned_final.csv", 1000)
+        """
+        GReal = makeGraph("flight_data_cleaned_final.csv", 100)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
         realSolutionHelper(GReal,airportList[0], airportList[1], 20)
         linkedState(GReal, airportList[0], airportList[1], 20)
         altMileStone2(GReal, airportList[0], airportList[1], 20)
+        """
 
     
