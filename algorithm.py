@@ -7,7 +7,7 @@ import random
 import time
 import matplotlib.pyplot as plt
 import math
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 
 plotGrowthRate = True 
 
@@ -220,20 +220,22 @@ if __name__=="__main__":
             solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
             t1 = time.time()
             t2 = time.time()
-            LinkedStatesol  = linkedState(GReal, airportList[0], airportList[1],1000) 
+            LinkedStatesol  = linkedState(GReal, airportList[0], airportList[1], 1000) 
             t3 = time.time() 
             t4 = time.time()
             
-            alt_2_sol = LinkedStatesol(GReal, airportList[0], airportList[1],1000) 
+            alt_2_sol = altMileStone2(GReal, airportList[0], airportList[1],1000) 
             t5 = time.time()
             calcTime.append(t1-t0)
             linked_state_calctime.append(t3-t2)
             alt_state_2.append(t5-t4)
             inputSize.append(i)
-            y = V*math.log(E)*0.00001
-            y = V*E*math.log(E)*0.0000001
+            
             V =  len(GReal.airports)
             E = i
+            y = V*math.log(E)*0.00001
+            y = V*E*math.log(E)*0.0000001
+
             # if not solutionFound :
             print("Iteration: " + str(i))
         # if not LinkedStatesol: 
