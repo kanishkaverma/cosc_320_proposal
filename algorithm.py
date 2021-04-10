@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import math
 #from sklearn.linear_model import LinearRegression
 
-plotGrowthRate = True 
+plotGrowthRate = False 
 
 def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
@@ -201,9 +201,9 @@ if __name__=="__main__":
         
 
     if plotGrowthRate:
-        upperBound = 150# maximum number of flights to consider in loop
+        upperBound = 350# maximum number of flights to consider in loop
         lowerBound = 50
-        step = 5 
+        step = 10 
         calcTime = [] # stores timeDelta for finding solution
         linked_state_calctime = []
         alt_state_2 = []
@@ -211,6 +211,7 @@ if __name__=="__main__":
         src = 10980 # src airport id
         dst = 12896 # destination airport id
         estimated_runtime = []
+        estimated_runtime2 = []
         
         for i in range(lowerBound, upperBound, step):
             GReal = makeGraph("flight_data_cleaned_final.csv", i)
@@ -233,21 +234,24 @@ if __name__=="__main__":
 
             V =  len(GReal.airports)
             E = i
-            y = V*math.log(E)*0.00001
-            y = V*E*math.log(E)*0.0000001
+            #y = V*math.log(E)*0.00001
+            #y = V*E*math.log(E)*0.0000001
+            y2 = math.pow(V*E, 2) * 0.000000000025
+            y = math.pow(V, 2) * E *0.000000003
 
             # if not solutionFound :
             print("Iteration: " + str(i))
         # if not LinkedStatesol: 
-            estimated_runtime.append(y ) 
+            estimated_runtime.append(y)
+            estimated_runtime2.append(y2)
                 
             # inputSize.append(i)
 
             print("Iteration: " + str(i))
             print(V,E)
             
-        plt.plot(inputSize,estimated_runtime,label='estimated run time') 
-
+        plt.plot(inputSize,estimated_runtime2,label='(V*E)^2') 
+        plt.plot(inputSize,estimated_runtime,label='V^2 * E')
         plt.plot(inputSize, calcTime,label="state-algo")
         plt.plot(inputSize, linked_state_calctime,label="linked-state-algo")
         plt.plot(inputSize, alt_state_2,label="alt-state-algo")
@@ -260,13 +264,12 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        """
-        GReal = makeGraph("flight_data_cleaned_final.csv", 100)
+        GReal = makeGraph("flight_data_cleaned_final.csv", 500)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
         realSolutionHelper(GReal,airportList[0], airportList[1], 20)
         linkedState(GReal, airportList[0], airportList[1], 20)
         altMileStone2(GReal, airportList[0], airportList[1], 20)
-        """
+        
 
     
