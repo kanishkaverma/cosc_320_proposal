@@ -2,6 +2,7 @@
 # First, Vertex and Graph classes for directed graphs
 from functools import cmp_to_key
 from queue import PriorityQueue
+import copy
 # Constants we are going to use
 PRICE_PER_DISTANCE = 2.80/40
 PRICE_PER_FLIGHT_TIME = 13
@@ -16,16 +17,73 @@ class Flight:
         self.takeOffTime = takeOffTime
         self.airTime = airTime
         self.dist=dist
+        self.postFlightTime = takeOffTime + airTime + OFFLOADTIME
+
+    def calcCost(self, currentTime: int):
+        # This flight is already expired
+        if currentTime > self.takeOffTime:
+            return float('inf')
+        # Flight is not expired, get cost from current time
+        waitTime = self.takeOffTime - currentTime
+        waitCost = (waitTime/60/60)*PRICE_PER_WAIT_TIME
+        flightTimeCost = (self.airTime/60/60)*PRICE_PER_FLIGHT_TIME
+        distCost = self.dist * PRICE_PER_DISTANCE
+        return  waitCost + flightTimeCost + distCost
 
     def __str__(self):
         return f"src: {self.src} dst: {self.dst} takeOffTime: {self.takeOffTime} airTime: {self.airTime} distance: {self.dist}\n"
+
+class costFlightIntersection:
+    def __init__(self, flight: Flight, currentTime: int):
+        self.flight = flight
+        self.cost = flight.calcCost(currentTime)
+    
+    def reCalculate(self, currentTime: int):
+        self.cost = self.flight.calcCost(currentTime)
+        return self.cost
+    
+    def addCost(self, costAddition: int):
+        self.cost += costAddition
+    
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
+    
+    def __str__(self):
+        return f'{self.flight.__str__()} cost: {self.cost} \n' 
+
+
+class flightPath:
+    def __init__(self, flight: costFlightIntersection, prevFlightPath: list):
+        if prevFlightPath == None:
+            self.cost = flight.cost
+            self.flights = [flight.flight]
+            return
+        self.flights = copy.deepcopy(prevFlightPath)
+        self.flights.append(flight.flight)
+        self.cost = flight.cost
+
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
 
 class Airport:
     def __init__(self, airPortId: int):
         self.flights = []
         self.airportId = airPortId
         # useful for DFS
-        self.status = "unvisited"
+        self.visited = False
+        self.costFlightIntersections = []
 
     def hasFlight(self,dst: int):
         for flight in self.flights:
@@ -35,9 +93,11 @@ class Airport:
 
     def addFlight(self, flight: Flight):
         self.flights.append(flight)
+        self.costFlightIntersections.append(costFlightIntersection(flight, 0))
 
-    # def __repr__(self):
-    #     return {'name':self.name}
+    def updateCostIntersections(self, currentTime: int):
+        for intersection in self.costFlightIntersections:
+            intersection.reCalculate(currentTime)
 
     def __str__(self):
         outputStr = f"AirportID:: {self.airportId} \n"
@@ -75,7 +135,12 @@ class Graph:
             return False
         else:
             self.airports[flight.src].addFlight(flight)
-
+    
+    def updateAirports(self, currentTime: int):
+        for airportId in self.airports.keys():
+            self.airports[airportId].updateCostIntersections(currentTime)
+            # reset visited states of airports
+            self.airports[airportId].visited = False
 
     def __str__(self):
         outputStr = "For this entire graph, the airports are: \n\n\n"
@@ -105,6 +170,13 @@ class State:
         self.cost = currentCostTotal + self.getCost()
         self.pastStates = pastStates
         self.endTime = self.currentTime + self.waitTime + OFFLOADTIME
+    
+    def hasVisitedPreviously(self, airportId: int) -> bool: 
+        for state in self.pastStates:
+            if state.flight != None:
+                if airportId == state.flight.dst:
+                    return True
+        return False
 
     def __eq__(self, other):
         return self.cost == other.cost
@@ -116,12 +188,9 @@ class State:
         return self.cost > other.cost
 
     def getCost(self):
-        waitCost = (self.waitTime/60/60)*PRICE_PER_WAIT_TIME
-        flightTimeCost = (self.flight.airTime/60/60)*PRICE_PER_FLIGHT_TIME
-        distCost = self.flight.dist * PRICE_PER_DISTANCE
-        return  waitCost + flightTimeCost + distCost
+        return self.flight.calcCost(self.currentTime)
 
-    def __str__():
+    def __str__(self):
         return f"currentTime: { self.currentTime} currentLoc: {self.currentLoc} waitTime: {self.waitTime} src: {self.flight.src} dst: {self.flight.dst} takeOffTime: {self.flight.takeOffTime} airTime: {self.flight.airTime} distance: {self.flight.dist} cost: {self.cost} pastStates: {self.pastStates} endTime: {self.endTime}\n"
 
 if __name__ == "__main__":
@@ -137,6 +206,30 @@ if __name__ == "__main__":
 
     airportOne.sortByTakeOffTime()
     print(airportOne.flights[0].takeOffTime)
+
+    s = PriorityQueue()
+    src = 1111
+    dst = 2222
+    takeoffTime = 1980
+    airTime = 400
+    dist = 100
+    flight1 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip1 = costFlightIntersection(flight1, 2)
+    s.put(trip1)
+
+    src = 1111
+    dst = 2222
+    takeoffTime = 3000
+    airTime = 1000
+    dist = 500
+    flight2 = Flight(src, dst, takeoffTime, airTime, dist)
+    trip2 = costFlightIntersection(flight2, 2)
+    s.put(trip2)
+
+    item = s.get()
+    print(item.flight.airTime)
+    item2 = s.get()
+    print(item2.flight.airTime)
 
 
 """
