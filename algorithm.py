@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import math
 #from sklearn.linear_model import LinearRegression
 
-plotGrowthRate = False 
+plotGrowthRate = True 
 
 def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
@@ -166,6 +166,7 @@ def altMileStone2Helper(G: ag.Graph, src: int, dst: int, startTime: int):
             if currentState.currentLoc == dst:
                 currentState.pastStates.append(currentState)
                 solutionPq.put(currentState)
+                continue
             # Intermediate node: add all the new states we can reach from this state
             # Get current airport, and copy the current states (so we can alter freely)
             currentAirport = G.airports[currentState.currentLoc]
@@ -189,7 +190,7 @@ def altMileStone2Helper(G: ag.Graph, src: int, dst: int, startTime: int):
 if __name__=="__main__":
 
     # First test case: can it find a direclty connecting edge?
-
+    """
     G = ag.Graph() # initialize graph
     f1 = ag.Flight(1,2,3,4,100) # add flight
     G.addAirport(1)
@@ -198,6 +199,7 @@ if __name__=="__main__":
     realSolutionHelper(G,1,2,1)
     linkedState(G,1,2,1)
     altMileStone2(G,1,2,1)
+    """
         
 
     if plotGrowthRate:
@@ -267,9 +269,13 @@ if __name__=="__main__":
         GReal = makeGraph("flight_data_cleaned_final.csv", 500)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
-        realSolutionHelper(GReal,airportList[0], airportList[1], 20)
-        linkedState(GReal, airportList[0], airportList[1], 20)
+        t0 = time.time()
         altMileStone2(GReal, airportList[0], airportList[1], 20)
+        t1 = time.time()
+        #linkedState(GReal, airportList[0], airportList[1], 20)
+        realSolutionHelper(GReal,airportList[0], airportList[1], 20)
+        t2 = time.time()
+        print(f'Alt: {t1-t0} first and Org: {t2-t1} second')
         
 
     
