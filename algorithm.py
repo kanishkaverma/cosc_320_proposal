@@ -8,7 +8,7 @@ import time
 import matplotlib.pyplot as plt
 import math
 
-plotGrowthRate = True
+plotGrowthRate = False
 
 def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
@@ -21,7 +21,7 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
         if not plotGrowthRate: 
             print(f"The linked state solution from {src} to {dst} does not exist!")
         return []
-    if not plotGrowthRate
+    if not plotGrowthRate:
         print(f"The linked state solution from {src} to {dst} is:")
         for flight in currentSolution:
             print(flight)
@@ -129,6 +129,61 @@ def realSolution(G: ag.Graph, src: int, dst: int, startTime: int):
         if not plotGrowthRate:
             print(f'There was no state solution between {src} and {dst} that made a solution possible')
         return []
+# Generate all possible solutions, select optimal
+def altMileStone2(G: ag.Graph, src: int, dst: int, startTime: int):
+    ourSolution = altMileStone2Helper(G,src,dst,startTime)
+    # There was no solution
+    if len(ourSolution) == 0:
+        if not plotGrowthRate:
+            print("There was no alt state solution found")  
+        return False  
+    else: # There was a solution
+        if not plotGrowthRate:
+            print(f"The alt state solution from {src} to {dst} is ")
+            for state in ourSolution:
+                if state.flight != None:
+                    print(state.flight)
+            print(f'The cost is: {ourSolution[len(ourSolution)-1].cost}')
+        return True
+# Generate all possible solutions, select optimal
+def altMileStone2Helper(G: ag.Graph, src: int, dst: int, startTime: int):
+    # If our nodes are not both in the graph, obviously impossible
+    if src not in G.airports or dst not in G.airports:
+        if not plotGrowthRate: 
+            print("The src and destination are not both in the graph")
+        return []
+    else:
+        solutionPq = PriorityQueue()
+        # Create an inital state, place in pq
+        startState = ag.State(src,None,startTime,[], 0)
+        pq = PriorityQueue()
+        pq.put(startState)
+        while not pq.empty():
+            # Get the current state
+            currentState = pq.get()
+            # If we arrived at our destination, add current state to our solution, and return it
+            if currentState.currentLoc == dst:
+                currentState.pastStates.append(currentState)
+                solutionPq.put(currentState)
+            # Intermediate node: add all the new states we can reach from this state
+            # Get current airport, and copy the current states (so we can alter freely)
+            currentAirport = G.airports[currentState.currentLoc]
+            newPastStates = copy.deepcopy(currentState.pastStates)
+            # Add current state to this states working solution
+            newPastStates.append(currentState)
+            # Add all the valid states from this airport at this point in time
+            for flight in currentAirport.flights:
+                if flight.takeOffTime > currentState.endTime and not currentState.hasVisitedPreviously(flight.dst):
+                    newState = ag.State(flight.dst,flight,currentState.endTime, copy.deepcopy(newPastStates), currentState.cost)
+                    pq.put(newState)
+        # There was no solution, we fully explored literally every state
+        if solutionPq.empty():
+            if not plotGrowthRate:
+                print(f'There was no alt state solution between {src} and {dst} that made a solution possible')
+            return []
+        else:
+            return solutionPq.get().pastStates
+
 
 if __name__=="__main__":
 
@@ -141,6 +196,7 @@ if __name__=="__main__":
     G.addFlight(f1)
     realSolutionHelper(G,1,2,1)
     linkedState(G,1,2,1)
+    altMileStone2(G,1,2,1)
         
 
     if plotGrowthRate:
@@ -191,10 +247,11 @@ if __name__=="__main__":
         plt.show()
 
     else:
-        GReal = makeGraph("flight_data_cleaned_final.csv", 100)
+        GReal = makeGraph("flight_data_cleaned_final.csv", 1000)
         d = list(GReal.airports.keys())
         airportList = random.sample(d, 2)
-        realSolutionHelper(GReal,airportList[0],airportList[1], 20)
-        linkedState(GReal,airportList[0],airportList[1], 20)
+        realSolutionHelper(GReal,airportList[0], airportList[1], 20)
+        linkedState(GReal, airportList[0], airportList[1], 20)
+        altMileStone2(GReal, airportList[0], airportList[1], 20)
 
     
