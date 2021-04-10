@@ -6,8 +6,9 @@ import copy
 import random
 import time
 import matplotlib.pyplot as plt
+import math
 
-plotGrowthRate = False
+plotGrowthRate = True
 
 def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     if src not in G.airports or dst not in G.airports:
@@ -17,7 +18,9 @@ def linkedState(G: ag.Graph, src: int, dst: int, startTime: int):
     currentSolution = []
     solution = linkedStateHelper(G, src, dst, startTime, currentSolution)
     if solution == None or len(currentSolution) == 0:
-        print(f"The linked state solution from {src} to {dst} does not exist!")
+        if not plotGrowthRate: 
+
+            print(f"The linked state solution from {src} to {dst} does not exist!")
         return []
     print(f"The linked state solution from {src} to {dst} is:")
     for flight in currentSolution:
@@ -145,26 +148,46 @@ if __name__=="__main__":
         lowerBound = 100
         step = 10
         calcTime = [] # stores timeDelta for finding solution
+        linked_state_calctime = []
         inputSize = [] # stores the input size for the respective timeDelta
         src = 10980 # src airport id
         dst = 12896 # destination airport id
+        estimated_runtime = []
         
         for i in range(lowerBound, upperBound, step):
             GReal = makeGraph("flight_data_cleaned_final.csv", i)
             d = list(GReal.airports.keys())
-            t0 = time.time()
             airportList = random.sample(d, 2)
+            t0 = time.time()
             solutionFound = realSolutionHelper(GReal,airportList[0],airportList[1], 1000)
             t1 = time.time()
-            if not solutionFound:
-                calcTime.append(t1-t0)
-                inputSize.append(i)
-                print("Iteration: " + str(i))
+            t2 = time.time()
+            LinkedStatesol  = linkedState(GReal, airportList[0],airportList[1],1000 )
+            t3 = time.time() 
+            V =  len(GReal.airports)
+            E = i
+            # if not solutionFound :
+            calcTime.append(t1-t0)
+            y = V*E*math.log(V)*0.0000005
+            inputSize.append(i)
+            print("Iteration: " + str(i))
+        # if not LinkedStatesol: 
+            estimated_runtime.append(y ) 
+            linked_state_calctime.append(t3-t2)
+                
+            # inputSize.append(i)
 
-        plt.plot(inputSize, calcTime)
+            print("Iteration: " + str(i))
+            print(V,E)
+            
+        plt.plot(inputSize,estimated_runtime,label='estimated run time') 
+
+        plt.plot(inputSize, calcTime,label="djikstras algo - mile stone 3")
+        plt.plot(inputSize, linked_state_calctime,label="milestone 4 - linked state ")
         plt.title('Calculation Time VS Number of Flights Considered Per Node')
         plt.xlabel('Input')
         plt.ylabel('Calculation Time')
+        plt.legend()
         plt.show()
 
     else:
